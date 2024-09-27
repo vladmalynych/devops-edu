@@ -1,9 +1,4 @@
-output "buckets_info" {
-  description = "ARN of the bucket"
-  value = {
-    for k, v in aws_s3_bucket.this : k => {
-      arn    = v.arn,
-      bucket = v.bucket
-    }
-  }
+output "bucket_name" {
+  value = aws_s3_bucket.this.bucket
+  description = "The name of the S3 bucket"
 }

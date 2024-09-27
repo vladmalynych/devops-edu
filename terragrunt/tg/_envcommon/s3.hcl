@@ -1,6 +1,7 @@
 terraform {
   #source = "${local.source_base_url}//terragrunt/tf-modules/s3?ref=s3-v0.0.1"
   source = "${get_repo_root()}//terragrunt/tf-modules/s3"
+  source = "${get_repo_root()}/terragrunt/tf-modules//s3"
 }
 
 locals {

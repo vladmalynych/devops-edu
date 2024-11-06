@@ -27,7 +27,7 @@ remote_state {
     profile        = local.backend_aws_profile # Local AWS profile name
     region         = local.aws_region
     encrypt        = true
-    key            = format("%s/terraform.tfstate", path_relative_to_include())
+    key            = format("%s/terraform.tfstate", path_relative_to_include()) # path from terragrunt.hcl to include
     bucket         = local.backend_s3_bucket
     dynamodb_table = local.backend_dynamodb_table
   }

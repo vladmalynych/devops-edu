@@ -6,5 +6,13 @@ locals {
   account_name = "vladmalynych"
   aws_profile  = "vladmalynych"
   backend_aws_profile = local.aws_profile
-  backend_s3_bucket = edu_tf_state
+  backend_s3_bucket = "devops-edu-terragrunt-state"
+  backend_dynamodb_table = "devops-edu-terragrunt-lock"
 }
+
+# # Account-specific configurations that can be inherited by environment configurations
+# inputs = {
+#   account_name = local.account_name
+#   account_id   = local.account_id
+#   aws_profile  = local.aws_profile
+# }

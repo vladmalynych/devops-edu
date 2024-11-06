@@ -13,12 +13,12 @@ variable "instance_name" {
   description = "Name for the EC2 instance"
 }
 
-variable "region" {
+variable "subnet_id" {
   type        = string
-  description = "The AWS region"
+  description = "AWS VPC subnet id"
 }
 
-variable "environment" {
-  type        = string
-  description = "Environment (e.g., dev, prod)"
+variable "security_group_ids" {
+  type        = list(string)
+  description = "AWS security group id"
 }

@@ -1,7 +1,5 @@
 # ---------------------------------------------------------------------------------------------------------------------
 # TERRAGRUNT CONFIGURATION
-# Terragrunt is a thin wrapper for Terraform that provides extra tools for working with multiple Terraform modules,
-# remote state, and locking: https://github.com/gruntwork-io/terragrunt
 # ---------------------------------------------------------------------------------------------------------------------
 # Apply extra arguments to terraform command
 terraform {
@@ -20,15 +18,21 @@ remote_state {
   # Disable remote-state initialization (useful for terragrunt run-all validate)
   disable_init = tobool(get_env("TERRAGRUNT_DISABLE_INIT", "false"))
 
+  generate = {
+    path      = "backend.tf"
+    if_exists = "overwrite_terragrunt"
+  }
+
   config = {
     profile        = local.backend_aws_profile # Local AWS profile name
-    region         = "eu-central-1"
+    region         = local.aws_region
     encrypt        = true
     key            = format("%s/terraform.tfstate", path_relative_to_include())
     bucket         = local.backend_s3_bucket
-    dynamodb_table = format("edu-terraform-states-locks")
+    dynamodb_table = local.backend_dynamodb_table
   }
 }
+
 
 # Generate an AWS provider block
 generate "provider" {
@@ -36,8 +40,9 @@ generate "provider" {
   if_exists = "overwrite_terragrunt"
   contents  = <<EOF
 provider "aws" {
-  region = "${local.aws_region}"
+  region  = "${local.aws_region}"
   profile = "${local.aws_profile}"
+
 
   # Only these AWS Account IDs may be operated on by this template
   allowed_account_ids = ["${local.account_id}"]
@@ -46,6 +51,8 @@ provider "aws" {
     tags = {
       Terraform   = "true"
       Environment = "${local.env}"
+      Project     = "${local.project_name}"
+      Owner       = "${local.owner_name}"
     }
   }
 }
@@ -71,23 +78,18 @@ locals {
   )
 
   # Extract variables for easier manipulation
-  aws_region          = local.region_vars.locals.aws_region
-  account_name        = local.account_vars.locals.account_name
-  account_id          = local.account_vars.locals.account_id
-  aws_profile         = local.account_vars.locals.aws_profile
-  backend_aws_profile = local.account_vars.locals.backend_aws_profile
-  backend_s3_bucket   = local.account_vars.locals.backend_s3_bucket
-  env                 = local.environment_vars.locals.environment
+  aws_region          = lookup(local.region_vars.locals, "aws_region", "eu-central-1")
+  account_name        = lookup(local.account_vars.locals, "account_name", "default-account")
+  account_id          = lookup(local.account_vars.locals, "account_id", "1234567890")
+  aws_profile         = lookup(local.account_vars.locals, "aws_profile", "default")
+  backend_aws_profile = lookup(local.account_vars.locals, "backend_aws_profile", "default")
+  backend_s3_bucket   = lookup(local.account_vars.locals, "backend_s3_bucket", "my-default-bucket")
+  backend_dynamodb_table = lookup(local.account_vars.locals, "backend_dynamodb_table", "terraform-locks")
+  env                 = lookup(local.environment_vars.locals, "environment", "dev")
+  project_name        = lookup(local.global_vars.locals, "project_name", "MyProject")
+  owner_name          = lookup(local.global_vars.locals, "owner_name", "MyOwner")
 }
 
-# ---------------------------------------------------------------------------------------------------------------------
-# GLOBAL PARAMETERS
-# These variables apply to all configurations in this subfolder. These are automatically merged into the child
-# `terragrunt.hcl` config via the include block.
-# ---------------------------------------------------------------------------------------------------------------------
-
-# Configure root level variables that all resources can inherit. This is especially helpful with multi-account configs
-# where terraform_remote_state data sources are placed directly into the modules.
 inputs = (
   local.merged_vars
 )

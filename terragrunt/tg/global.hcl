@@ -2,6 +2,7 @@
 locals {
   project_name = "terragrunt-demo"
   owner_name   = "devops-edu"
+  deployment_prefix = "demo-terragrunt"
 }
 
 # # Common configurations that can be inherited by other environments

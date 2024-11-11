@@ -1,0 +1,67 @@
+digger:
+  image:
+    repository: registry.digger.dev/diggerhq/digger_backend
+    tag: "v0.6.44"
+
+  livenessProbe:
+    httpGet:
+      path: /health
+      port: 3000
+    periodSeconds: 20
+  startupProbe:
+    httpGet:
+      path: /health
+      port: 3000
+    failureThreshold: 30
+    periodSeconds: 10
+
+  service:
+    type: ClusterIP
+    port: 3000 # default port for digger backend
+
+  ingress:
+    enabled: false
+#     className: ""
+#     annotations: {}
+#     host: "digger.demo"
+#     path: /
+#     tls:
+#       secretName: "digger-backend-tls"
+
+  # digger requires a secret with the following key-value pairs:
+  # HTTP_BASIC_AUTH_USERNAME: <value>
+  # HTTP_BASIC_AUTH_PASSWORD: <value>
+  # BEARER_AUTH_TOKEN: <value>
+  # HOSTNAME: <value>
+  # GITHUB_ORG: <value>
+  # GITHUB_APP_ID: <value>
+  # GITHUB_APP_CLIENT_ID: <value>
+  # GITHUB_APP_CLIENT_SECRET: <value>
+  # GITHUB_APP_PRIVATE_KEY: <value>
+  # GITHUB_WEBHOOK_SECRET: <value>
+  # POSTGRES_PASSWORD: <value>
+  # pass the content in clear or specify the name of the existing secret
+  secret:
+    useExistingSecret: false
+    httpBasicAuthUsername: "admin"
+    httpBasicAuthPassword: "admin"
+    bearerAuthToken: "" # You should generate
+    hostname: ""
+    githubOrg: ""
+    githubAppID: ""
+    githubAppClientID: ""
+    githubAppClientSecret: ""
+    githubAppKeyFile: #base64 encoded file
+    githubWebhookSecret: ""
+
+postgres:
+  enabled: true
+  sslmode: "disable"
+  image: postgres
+  tag: "14"
+  resources:
+    limits: {}
+    requests: {}
+  secret:
+    useExistingSecret: false
+    password: "password"

@@ -1,0 +1,21 @@
+# Tiltfile
+
+allow_k8s_contexts('docker-desktop')
+
+print("""
+-----------------------------------------------------------------
+✨ DIGGER DEMO PROJECT
+ℹ️ Tilt file: {tiltfile_path}
+-----------------------------------------------------------------
+""".format(tiltfile_path=config.main_path).strip())
+
+load('ext://helm_resource', 'helm_resource', 'helm_repo')
+helm_repo(name='digger-repo', url='https://diggerhq.github.io/helm-charts/')
+helm_resource(
+    name='digger',
+    chart='digger/digger-backend',
+    resource_deps=['digger-repo'],
+    namespace='digger',
+    flags=['--create-namespace', '--values=./values.yaml'])
+
+k8s_resource(workload='digger', port_forwards=['3000:3000'])

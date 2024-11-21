@@ -1,0 +1,7 @@
+db:
+  allowArbitraryServer: false
+  port: 3306
+  host: demo-mysql.mysql.svc.cluster.local
+
+service:
+  type: ClusterIP  # Service type

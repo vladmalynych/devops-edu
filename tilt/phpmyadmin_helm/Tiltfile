@@ -1,0 +1,35 @@
+# Tiltfile
+
+allow_k8s_contexts('docker-desktop')
+
+print("""
+-----------------------------------------------------------------
+✨ REDIS DEMO PROJECT
+ℹ️ Tilt file: {tiltfile_path}
+-----------------------------------------------------------------
+""".format(tiltfile_path=config.main_path).strip())
+
+load('ext://helm_resource', 'helm_resource', 'helm_repo')
+load('ext://namespace', 'namespace_create', 'namespace_inject')
+
+namespace_create('mysql')
+namespace_create('phpmyadmin')
+
+helm_repo(name='bitnami', url='https://charts.bitnami.com/bitnami')
+
+helm_resource(
+    name='demo-mysql',
+    chart='bitnami/mysql',
+    resource_deps=['bitnami'],
+    namespace='mysql',
+    flags=['--values=./helm/mysql-values.yaml'])
+
+helm_resource(
+    name='demo-phpmyadmin',
+    chart='bitnami/phpmyadmin',
+    resource_deps=['bitnami'],
+    namespace='phpmyadmin',
+    flags=['--values=./helm/phpmyadmin-values.yaml']
+)
+
+k8s_resource(workload='demo-phpmyadmin', port_forwards=[port_forward(8080, 8080, name='phpmyadmin')])

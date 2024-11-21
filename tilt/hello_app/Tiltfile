@@ -1,0 +1,47 @@
+# Tiltfile
+version_settings(constraint='>=0.33.20')
+
+allow_k8s_contexts('docker-desktop')
+
+print("""
+-----------------------------------------------------------------
+✨ Hello DevOps, have fun!
+ℹ️ Tilt file: {tiltfile_path}
+-----------------------------------------------------------------
+""".format(tiltfile_path=config.main_path).strip())
+
+load('ext://namespace', 'namespace_create', 'namespace_inject')
+
+namespace_create('hello-app')
+
+docker_build(
+    'hello-app',
+    context='.',
+    dockerfile='./Dockerfile',
+    only=['./app'],
+    ignore=['./app/dist/'],
+    live_update=[
+        fall_back_on('./app/app.conf'),
+        sync('./app', '/app'),
+        run(
+            'npm install',
+            trigger=['./app/package.json', './app/package-lock.json']
+        )
+    ]
+)
+
+k8s_yaml("k8s/deployment.yaml", )
+k8s_yaml("k8s/service.yaml")
+
+k8s_resource(
+    workload='hello-app-deployment',
+    port_forwards=[port_forward(3000, 3000, name='hello-app')],
+    labels='hello-app'
+)
+
+local_resource(
+    'pods_list',
+    cmd='kubectl get pods -n hello-app',
+    trigger_mode=TRIGGER_MODE_MANUAL,
+    auto_init=False
+)

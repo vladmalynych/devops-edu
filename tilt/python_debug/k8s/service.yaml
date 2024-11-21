@@ -1,0 +1,18 @@
+# k8s/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: demo-python-pdb-svc
+  namespace: demo-python-pdb
+spec:
+  selector:
+    app: demo-python-pdb
+  ports:
+    - protocol: TCP
+      name: web
+      port: 8000
+      targetPort: 8000
+    - protocol: TCP
+      name: debugger
+      port: 5555
+      targetPort: 5555

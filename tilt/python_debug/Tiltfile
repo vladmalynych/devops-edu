@@ -1,0 +1,35 @@
+# Tiltfile
+version_settings(constraint='>=0.33.20')
+
+allow_k8s_contexts('docker-desktop')
+
+load('ext://namespace', 'namespace_create')
+
+namespace_create('demo-python-pdb')
+
+docker_build(
+    'demo-python-pdb-img',
+    context='.',
+    dockerfile='./Dockerfile',
+    only=['./app'],
+    live_update=[
+        fall_back_on('./app/templates/index.html'),
+        sync('./app', '/app'),
+        run(
+            cmd='pip install -r /app/requirements.txt',
+            trigger='./app/requirements.txt'
+        ),
+    ]
+)
+
+k8s_yaml('k8s/deployment.yaml')
+k8s_yaml('k8s/service.yaml')
+
+k8s_resource(
+    workload='demo-python-pdb',
+    port_forwards=[
+        port_forward(8000, 8000, name='web'),
+        port_forward(5555, 5555, name='debug'),
+    ],
+    labels='demo-python-pdb'
+)

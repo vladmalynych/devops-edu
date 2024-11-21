@@ -1,0 +1,26 @@
+# k8s/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo-python-pdb
+  namespace: demo-python-pdb
+  labels:
+    app: demo-python-pdb
+spec:
+  selector:
+    matchLabels:
+      app: demo-python-pdb
+  template:
+    metadata:
+      labels:
+        app: demo-python-pdb
+    spec:
+      containers:
+        - name: demo-python-pdb
+          image: demo-python-pdb-img
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: web
+              containerPort: 8000
+            - name: debugger
+              containerPort: 5555

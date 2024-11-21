@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Color Changing Background</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+        button {
+            position: absolute;
+            top: 20px;
+            padding: 10px 20px;
+            font-size: 18px;
+            background-color: #333;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #555;
+        }
+    </style>
+</head>
+<body>
+    <button onclick="changeBackground()">🔄 Change Background Color</button>
+    <script>
+        function setup() {
+            createCanvas(windowWidth, windowHeight);
+            noLoop();
+        }
+
+        function draw() {
+            // Initial background color
+            background(221, 221, 221);
+        }
+
+        function changeBackground() {
+            // Generate random RGB values
+            const r = random(255);
+            const g = random(255);
+            const b = random(255);
+
+            // Set the background color to random RGB
+            background(r, g, b);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+replicas: 1
+
+mode: standalone
+
+persistence:
+  enabled: false
+
+rootUser: "admin"
+rootPassword: "admin123"
+
+resources:
+  requests:
+    memory: 512Mi

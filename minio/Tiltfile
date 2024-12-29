@@ -1,0 +1,31 @@
+# Tiltfile
+version_settings(constraint='>=0.33.21')
+allow_k8s_contexts('docker-desktop')
+
+print("""
+-----------------------------------------------------------------
+✨ Minio DEMO
+ℹ️ Tilt file: {tiltfile_path}
+-----------------------------------------------------------------
+""".format(tiltfile_path=config.main_path).strip())
+
+load('ext://helm_resource', 'helm_resource', 'helm_repo')
+load('ext://namespace', 'namespace_create')
+
+namespace_create('minio')
+helm_repo(name='minio', url='https://charts.min.io/')
+helm_resource(
+    name='minio-local',
+    chart='minio/minio',
+    resource_deps=['minio'],
+    namespace='minio',
+    flags=['--values=./helm/minio-values.yaml']
+)
+
+k8s_resource(
+    workload='minio-local',
+    port_forwards=[
+        port_forward(9000, 9000, name='API'),
+        port_forward(9001, 9001, name='WEBUI')
+    ]
+)

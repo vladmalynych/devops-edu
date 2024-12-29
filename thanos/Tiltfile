@@ -1,0 +1,49 @@
+# Tiltfile
+version_settings(constraint='>=0.33.21')
+allow_k8s_contexts('docker-desktop')
+
+print("""
+-----------------------------------------------------------------
+✨ Thanos DEMO
+ℹ️ Tilt file: {tiltfile_path}
+-----------------------------------------------------------------
+""".format(tiltfile_path=config.main_path).strip())
+
+load('ext://helm_resource', 'helm_resource', 'helm_repo')
+load('ext://namespace', 'namespace_create')
+
+# LocalStack for Local S3 API
+namespace_create('localstack')
+k8s_yaml([
+    "manifests/localstack-storage-class.yaml"
+])
+helm_repo(name='localstack-charts', url='https://localstack.github.io/helm-charts')
+helm_resource(
+    name='localstack',
+    chart='localstack-charts/localstack',
+    resource_deps=['localstack-charts'],
+    namespace='localstack',
+    flags=['--values=./helm/localstack-values.yaml']
+)
+k8s_resource(workload='localstack', port_forwards=[port_forward(4566, 4566, name='localstack')])
+
+# Monitoring
+namespace_create('monitoring-main')
+k8s_yaml([
+    "manifests/alertmanager-storage-class.yaml",
+    "manifests/prometheus-storage-class.yaml",
+    "manifests/grafana-storage-class.yaml",
+    "manifests/thanos-storage-config.yaml"
+])
+
+helm_repo(name='prometheus-community', url='https://prometheus-community.github.io/helm-charts')
+helm_resource(
+    name='monitoring-main',
+    chart='prometheus-community/kube-prometheus-stack',
+    resource_deps=['prometheus-community'],
+    namespace='monitoring-main',
+    flags=[
+        '--values=./helm/kube-prom-stack-master-values.yaml'
+    ]
+)
+

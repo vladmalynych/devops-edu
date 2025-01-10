@@ -1,0 +1,30 @@
+# Tiltfile
+allow_k8s_contexts('docker-desktop')
+
+print("""
+-----------------------------------------------------------------
+✨ OpenCost DEMO
+ℹ️ Tilt file: {tiltfile_path}
+-----------------------------------------------------------------
+""".format(tiltfile_path=config.main_path).strip())
+
+load('ext://helm_resource', 'helm_resource', 'helm_repo')
+load('ext://namespace', 'namespace_create')
+
+namespace_create('opencost')
+helm_repo(name='opencost', url='https://opencost.github.io/opencost-helm-chart')
+
+helm_resource(
+    name='opencost-local',
+    chart='opencost/opencost',
+    resource_deps=['opencost'],
+    namespace='opencost',
+    flags=['--values=./helm/opencost-values.yaml']
+)
+
+k8s_resource(
+    workload='opencost-local',
+    port_forwards=[
+        port_forward(9000, 9000, name='API'),
+    ]
+)

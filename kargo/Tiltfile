@@ -1,0 +1,39 @@
+# Tiltfile
+allow_k8s_contexts('docker-desktop')
+
+print("""
+-----------------------------------------------------------------
+✨ KARGO DEMO PROJECT
+ℹ️ Tilt file: {tiltfile_path}
+-----------------------------------------------------------------
+""".format(tiltfile_path=config.main_path).strip())
+
+load('ext://helm_resource', 'helm_resource', 'helm_repo')
+load('ext://namespace', 'namespace_create', 'namespace_inject')
+
+namespace_create('argocd')
+helm_repo(name='argo', url='https://argoproj.github.io/argo-helm')
+helm_resource(
+    name='argocd',
+    chart='argo/argo-cd',
+    resource_deps=['argo'],
+    namespace='argocd',
+    flags=['--values=./argocd/values.yaml']
+)
+
+k8s_resource(
+    workload='argocd',
+    links=[
+      link('localhost:8080', 'argocd'),
+   ]
+)
+
+local_resource(
+    name='argocd-forward',
+    serve_cmd='kubectl port-forward -n argocd svc/argocd-server 8080:80',
+    resource_deps=['argocd']
+)
+
+k8s_yaml('argocd/demo-app/dev.yaml')
+k8s_yaml('argocd/demo-app/stage.yaml')
+k8s_yaml('argocd/demo-app/prod.yaml')

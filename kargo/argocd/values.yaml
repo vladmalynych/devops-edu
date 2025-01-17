@@ -1,0 +1,8 @@
+configs:
+    secret:
+        argocdServerAdminPassword: "$2a$10$DDBWNAIHJ/fvQO5jedWVneHCa0x.c2h81rkj65yYAOrW5ZM6jLvoK" # admin
+    repositories:
+        devops-edu:
+            type: git
+            url: https://github.com/vladmalynych/devops-edu
+            project: default

@@ -1,0 +1,19 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: demo-app-dev
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/vladmalynych/devops-edu
+    path: kargo/argocd/demo-app/demo/environments/dev
+    targetRevision: HEAD
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: dev
+    createNamespace: true
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

@@ -1,5 +1,10 @@
 # Tiltfile
 allow_k8s_contexts('docker-desktop')
+update_settings(
+    max_parallel_updates=3,
+    k8s_upsert_timeout_secs=300,
+    suppress_unused_image_warnings=None
+)
 
 print("""
 -----------------------------------------------------------------
@@ -9,16 +14,34 @@ print("""
 """.format(tiltfile_path=config.main_path).strip())
 
 load('ext://helm_resource', 'helm_resource', 'helm_repo')
-load('ext://namespace', 'namespace_create', 'namespace_inject')
+load('ext://namespace', 'namespace_create')
 
-namespace_create('argocd')
 helm_repo(name='argo', url='https://argoproj.github.io/argo-helm')
+namespace_create('argocd')
 helm_resource(
     name='argocd',
     chart='argo/argo-cd',
     resource_deps=['argo'],
     namespace='argocd',
     flags=['--values=./argocd/values.yaml']
+)
+namespace_create('argo-rollouts')
+helm_resource(
+    name='argo-rollouts',
+    chart='argo/argo-rollouts',
+    resource_deps=['argo'],
+    namespace='argo-rollouts',
+    flags=['--values=./argo-rollouts/values.yaml']
+)
+
+namespace_create('cert-manager')
+helm_repo(name='jetstack', url='https://charts.jetstack.io')
+helm_resource(
+    name='cert-manager',
+    chart='jetstack/cert-manager',
+    resource_deps=['jetstack'],
+    namespace='cert-manager',
+    flags=['--values=./cert-manager/values.yaml']
 )
 
 k8s_resource(

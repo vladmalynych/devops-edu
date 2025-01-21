@@ -3,7 +3,3 @@ kind: Project
 metadata:
   name: kargo-demo
   namespace: kargo
-spec:
-  promotionPolicies:
-  - stage: dev
-    autoPromotionEnabled: true

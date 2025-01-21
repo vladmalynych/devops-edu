@@ -37,9 +37,9 @@ local_resource(
 )
 
 # Argo applications
-namespace_create('dev')
-namespace_create('stage')
-namespace_create('prod')
+namespace_create('kargo-demo-dev')
+namespace_create('kargo-demo-stage')
+namespace_create('kargo-demo-prod')
 k8s_yaml([
     'argocd/demo-app/dev.yaml',
     'argocd/demo-app/stage.yaml',
@@ -49,12 +49,12 @@ k8s_resource(
     new_name='argocd-apps',
     resource_deps=['argocd'],
     objects=[
-        'dev:namespace',
-        'stage:namespace',
-        'prod:namespace',
-        'demo-app-dev:application:argocd',
-        'demo-app-stage:application:argocd',
-        'demo-app-prod:application:argocd'
+        'kargo-demo-dev:namespace',
+        'kargo-demo-stage:namespace',
+        'kargo-demo-prod:namespace',
+        'kargo-demo-dev:application:argocd',
+        'kargo-demo-stage:application:argocd',
+        'kargo-demo-prod:application:argocd',
     ]
 )
 

@@ -1,20 +1,19 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: demo-app-stage
+  name: kargo-demo-stage
   namespace: argocd
+  annotations:
+    kargo.akuity.io/authorized-stage: kargo-demo:stage
 spec:
   project: default
   source:
     repoURL: https://github.com/vladmalynych/devops-edu.git
     path: kargo/argocd/demo-app/demo/environments/stage
-    targetRevision: HEAD
+    targetRevision: stage/stage
   destination:
     server: https://kubernetes.default.svc
-    namespace: stage
+    namespace: kargo-demo-stage
   syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
     syncOptions:
     - CreateNamespace=true

@@ -6,6 +6,9 @@ update_settings(
     suppress_unused_image_warnings=None
 )
 
+load('ext://helm_resource', 'helm_resource', 'helm_repo')
+load('ext://namespace', 'namespace_create')
+
 print("""
 -----------------------------------------------------------------
 ✨ KARGO DEMO PROJECT
@@ -13,9 +16,7 @@ print("""
 -----------------------------------------------------------------
 """.format(tiltfile_path=config.main_path).strip())
 
-load('ext://helm_resource', 'helm_resource', 'helm_repo')
-load('ext://namespace', 'namespace_create')
-
+# Deploy ArgoCD
 helm_repo(name='argo', url='https://argoproj.github.io/argo-helm')
 namespace_create('argocd')
 helm_resource(
@@ -25,6 +26,39 @@ helm_resource(
     namespace='argocd',
     flags=['--values=./argocd/values.yaml']
 )
+k8s_resource(
+    workload='argocd',
+    links=[link('https://localhost:8080', 'argocd')],
+)
+local_resource(
+    name='argocd-pf',
+    serve_cmd='kubectl port-forward -n argocd svc/argocd-server 8080:80',
+    resource_deps=['argocd']
+)
+
+# Argo applications
+namespace_create('dev')
+namespace_create('stage')
+namespace_create('prod')
+k8s_yaml([
+    'argocd/demo-app/dev.yaml',
+    'argocd/demo-app/stage.yaml',
+    'argocd/demo-app/prod.yaml',
+])
+k8s_resource(
+    new_name='argocd-apps',
+    resource_deps=['argocd'],
+    objects=[
+        'dev:namespace',
+        'stage:namespace',
+        'prod:namespace',
+        'demo-app-dev:application:argocd',
+        'demo-app-stage:application:argocd',
+        'demo-app-prod:application:argocd'
+    ]
+)
+
+# Deploy Argo-Rollouts
 namespace_create('argo-rollouts')
 helm_resource(
     name='argo-rollouts',
@@ -34,6 +68,7 @@ helm_resource(
     flags=['--values=./argo-rollouts/values.yaml']
 )
 
+# Deploy CertManager
 namespace_create('cert-manager')
 helm_repo(name='jetstack', url='https://charts.jetstack.io')
 helm_resource(
@@ -44,19 +79,44 @@ helm_resource(
     flags=['--values=./cert-manager/values.yaml']
 )
 
+# Deploy Kargo
+namespace_create('kargo')
+helm_resource(
+    name='kargo',
+    chart='oci://ghcr.io/akuity/kargo-charts/kargo',
+    namespace='kargo',
+    resource_deps=['cert-manager', 'argo-rollouts', 'argocd'],
+    flags=['--values=./kargo/values.yaml']
+)
 k8s_resource(
-    workload='argocd',
-    links=[
-      link('localhost:8080', 'argocd'),
-   ]
+    workload='kargo',
+    links=[link('https://localhost:9090', 'kargo-api')]
 )
-
 local_resource(
-    name='argocd-forward',
-    serve_cmd='kubectl port-forward -n argocd svc/argocd-server 8080:80',
-    resource_deps=['argocd']
+    name='kargo-forward',
+    serve_cmd='kubectl port-forward -n kargo svc/kargo-api 9090:443',
+    resource_deps=['kargo']
 )
 
-k8s_yaml('argocd/demo-app/dev.yaml')
-k8s_yaml('argocd/demo-app/stage.yaml')
-k8s_yaml('argocd/demo-app/prod.yaml')
+# Kargo application
+namespace_create(
+    name='kargo-demo',
+    labels=['kargo.akuity.io/project: "true"']
+)
+k8s_yaml([
+    'kargo/demo-app/project.yaml',
+    'kargo/demo-app/secret.yaml',
+    'kargo/demo-app/warehouse.yaml',
+    'kargo/demo-app/stages/dev.yaml',
+])
+k8s_resource(
+    new_name='kargo-demo-app',
+    resource_deps=['kargo'],
+    objects=[
+        'kargo-demo:namespace',
+        'kargo-demo:project:kargo',
+        'kargo-demo-repo:secret:kargo-demo',
+        'kargo-demo:warehouse:kargo-demo',
+        'dev:stage:kargo-demo',
+    ]
+)

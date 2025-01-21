@@ -1,0 +1,14 @@
+api:
+  adminAccount:
+    enabled: true
+    passwordHash: $2a$10$Zrhhie4vLz5ygtVSaif6o.qN36jgs6vjtMBdM6yrU1FOeiAAMMxOm
+    tokenSigningKey: iwishtowashmyirishwristwatch
+
+argoCD:
+  namespace: argocd
+
+argoRollouts:
+  namespace: argo-rollouts
+
+certManager:
+  namespace: cert-manager

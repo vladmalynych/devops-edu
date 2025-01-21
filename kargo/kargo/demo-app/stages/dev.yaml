@@ -53,7 +53,7 @@ spec:
       - uses: argocd-update
         config:
           apps:
-          - name: kargo-demo-${{ ctx.stage }}
+          - name: demo-app-${{ ctx.stage }}
             sources:
             - repoURL: ${{ vars.gitopsRepo }}
               desiredRevision: ${{ outputs.commit.commit }}

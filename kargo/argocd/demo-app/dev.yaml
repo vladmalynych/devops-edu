@@ -9,7 +9,7 @@ spec:
   project: default
   source:
     repoURL: https://github.com/vladmalynych/devops-edu.git
-    path: kargo/argocd/demo-app/demo/environments/dev/
+    path: kargo/argocd/demo-app/demo/environments/dev/manifests.yaml
     targetRevision: stage/dev
   destination:
     server: https://kubernetes.default.svc

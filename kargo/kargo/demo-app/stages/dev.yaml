@@ -41,6 +41,10 @@ spec:
           images:
           - image: ${{ vars.imageRepo }}
             tag: ${{ imageFrom(vars.imageRepo).Tag }}
+      - uses: kustomize-build
+        config:
+          path: ${{ vars.srcPath }}/kargo/argocd/demo-app/demo/environments/${{ ctx.stage }}
+          outPath: ${{ vars.outPath }}/kargo/argocd/demo-app/demo/environments/dev/manifests.yaml
       - uses: git-commit
         as: commit
         config:

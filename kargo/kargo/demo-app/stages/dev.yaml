@@ -24,40 +24,36 @@ spec:
       steps:
       - uses: git-clone
         config:
-          repoURL: \${{ vars.gitopsRepo }}
+          repoURL: ${{ vars.gitopsRepo }}
           checkout:
-          - branch: main
-            path: \${{ vars.srcPath }}
-          - branch: stage/\${{ ctx.stage }}
+          - branch: master
+            path: ${{ vars.srcPath }}
+          - branch: stage/${{ ctx.stage }}
             create: true
-            path: \${{ vars.outPath }}
+            path: ${{ vars.outPath }}
       - uses: git-clear
         config:
-          path: \${{ vars.outPath }}
+          path: ${{ vars.outPath }}
       - uses: kustomize-set-image
         as: update-image
         config:
-          path: \${{ vars.srcPath }}/kargo/argocd/demo-app/demo/environments/\${{ ctx.stage }}
+          path: ${{ vars.srcPath }}/kargo/argocd/demo-app/demo/environments/${{ ctx.stage }}
           images:
-          - image: \${{ vars.imageRepo }}
-            tag: \${{ imageFrom(vars.imageRepo).Tag }}
-      - uses: kustomize-build
-        config:
-          path: \${{ vars.srcPath }}/kargo/kargo/demo-app/stages/\${{ ctx.stage }}
-          outPath: \${{ vars.outPath }}/manifests.yaml
+          - image: ${{ vars.imageRepo }}
+            tag: ${{ imageFrom(vars.imageRepo).Tag }}
       - uses: git-commit
         as: commit
         config:
-          path: \${{ vars.outPath }}
+          path: ${{ vars.outPath }}
           messageFromSteps:
           - update-image
       - uses: git-push
         config:
-          path: \${{ vars.outPath }}
+          path: ${{ vars.outPath }}
       - uses: argocd-update
         config:
           apps:
-          - name: kargo-demo-\${{ ctx.stage }}
+          - name: kargo-demo-${{ ctx.stage }}
             sources:
-            - repoURL: \${{ vars.gitopsRepo }}
-              desiredRevision: \${{ outputs.commit.commit }}
+            - repoURL: ${{ vars.gitopsRepo }}
+              desiredRevision: ${{ outputs.commit.commit }}

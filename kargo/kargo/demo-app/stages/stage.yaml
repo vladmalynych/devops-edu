@@ -1,7 +1,7 @@
 apiVersion: kargo.akuity.io/v1alpha1
 kind: Stage
 metadata:
-  name: dev
+  name: stage
   namespace: kargo-demo
 spec:
   requestedFreight:
@@ -9,7 +9,8 @@ spec:
       kind: Warehouse
       name: kargo-demo
     sources:
-      direct: true
+      stages:
+      - dev
   promotionTemplate:
     spec:
       vars:
@@ -19,8 +20,6 @@ spec:
         value: nginx
       - name: srcPath
         value: ./src
-      - name: outPath
-        value: ./out
       steps:
       - uses: git-clone
         config:
@@ -28,12 +27,6 @@ spec:
           checkout:
           - branch: master
             path: ${{ vars.srcPath }}
-          - branch: stage/${{ ctx.stage }}
-            create: true
-            path: ${{ vars.outPath }}
-      - uses: git-clear
-        config:
-          path: ${{ vars.outPath }}
       - uses: kustomize-set-image
         as: update-image
         config:
@@ -41,19 +34,15 @@ spec:
           images:
           - image: ${{ vars.imageRepo }}
             tag: ${{ imageFrom(vars.imageRepo).Tag }}
-      - uses: kustomize-build
-        config:
-          path: ${{ vars.srcPath }}/kargo/argocd/demo-app/demo/environments/${{ ctx.stage }}
-          outPath: ${{ vars.outPath }}/kargo/argocd/demo-app/demo/environments/${{ ctx.stage }}/manifests.yaml
       - uses: git-commit
         as: commit
         config:
-          path: ${{ vars.outPath }}
+          path: ${{ vars.srcPath }}
           messageFromSteps:
           - update-image
       - uses: git-push
         config:
-          path: ${{ vars.outPath }}
+          path: ${{ vars.srcPath }}
       - uses: argocd-update
         config:
           apps:

@@ -9,3 +9,7 @@ spec:
       repoURL: nginx
       semverConstraint: ^1.26.0
       discoveryLimit: 5
+  - git:
+      repoURL: https://github.com/vladmalynych/devops-edu.git
+      includePaths:
+      - kargo/argocd/demo-app/demo/environments/dev/

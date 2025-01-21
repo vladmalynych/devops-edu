@@ -108,6 +108,8 @@ k8s_yaml([
     'kargo/demo-app/secret.yaml',
     'kargo/demo-app/warehouse.yaml',
     'kargo/demo-app/stages/dev.yaml',
+    'kargo/demo-app/stages/stage.yaml',
+    'kargo/demo-app/stages/prod.yaml',
 ])
 k8s_resource(
     new_name='kargo-demo-app',
@@ -118,5 +120,7 @@ k8s_resource(
         'kargo-demo-repo:secret:kargo-demo',
         'kargo-demo:warehouse:kargo-demo',
         'dev:stage:kargo-demo',
+        'stage:stage:kargo-demo',
+        'prod:stage:kargo-demo',
     ]
 )

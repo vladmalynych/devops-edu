@@ -7,7 +7,7 @@ spec:
   subscriptions:
   - image:
       repoURL: nginx
-      semverConstraint: ^1.26.0
+      semverConstraint: ^1.x
       discoveryLimit: 5
   - git:
       repoURL: https://github.com/vladmalynych/devops-edu.git

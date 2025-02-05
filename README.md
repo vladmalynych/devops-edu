@@ -8,6 +8,7 @@ This repository contains a collection of demo applications designed to showcase 
 - [kargo](https://github.com/vladmalynych/devops-edu/tree/master/kargo) - 🟢 DONE  | *Deployment automation tool for Kubernetes.*
 - [digger](https://github.com/vladmalynych/devops-edu/tree/master/digger) - 🔴 DROP   | *CI/CD automation tool for DevOps teams.*
 - [minio](https://github.com/vladmalynych/devops-edu/tree/master/minio) - 🟡 WIP   | *Object storage similar to Amazon S3.*
+- [nushell](https://github.com/vladmalynych/devops-edu/tree/master/nushell) - 🟢 DONE   | *Nushell shell for working with data.*
 - [opencost](https://github.com/vladmalynych/devops-edu/tree/master/opencost) - 🟡 WIP   | *Cost management tool for Kubernetes clusters.*
 - [renovatebot](https://github.com/vladmalynych/devops-edu/tree/master/renovatebot) - 🟡 WIP   | *Automated dependency update tool for Git repos.*
 - [terragrunt](https://github.com/vladmalynych/devops-edu/tree/master/terragrunt) - 🟢 DONE  | *Tool to manage Terraform configurations efficiently.*

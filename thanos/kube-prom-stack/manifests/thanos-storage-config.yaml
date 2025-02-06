@@ -4,5 +4,5 @@ data:
 kind: Secret
 metadata:
   name: thanos-storage-config
-  namespace: monitoring-main
+  namespace: monitoring
 type: Opaque

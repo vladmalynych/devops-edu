@@ -95,3 +95,4 @@ local_resource(
     resource_deps=['kube-prom-stack']
 )
 
+# Thanos

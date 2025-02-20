@@ -1,0 +1,28 @@
+# Tiltfile
+allow_k8s_contexts('docker-desktop')
+update_settings(
+    max_parallel_updates=3,
+    k8s_upsert_timeout_secs=300,
+    suppress_unused_image_warnings=None
+)
+
+load('ext://namespace', 'namespace_create', 'namespace_inject')
+load('ext://configmap', 'configmap_create')
+
+print("""
+-----------------------------------------------------------------
+✨ CADDY DEMO PROJECT
+ℹ️ Tilt file: {tiltfile_path}
+-----------------------------------------------------------------
+""".format(tiltfile_path=config.main_path).strip())
+
+namespace_create('caddy')
+configmap_create('caddy-config','caddy', from_file=['Caddyfile'])
+k8s_yaml([
+    namespace_inject(read_file('manifests/deployment.yaml'), 'caddy'),
+])
+k8s_resource(
+    workload='caddy',
+    port_forwards=[port_forward(8080, 8080, name='caddy')],
+    labels='caddy'
+)

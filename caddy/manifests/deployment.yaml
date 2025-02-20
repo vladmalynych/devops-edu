@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: caddy
+  labels:
+    app: caddy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: caddy
+  template:
+    metadata:
+      labels:
+        app: caddy
+    spec:
+      containers:
+      - name: caddy
+        image: caddy:latest
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+          limits:
+            cpu: 100m
+            memory: 100Mi
+        ports:
+        - containerPort: 8080
+          name: web
+        volumeMounts:
+        - name: caddyfile
+          mountPath: /etc/caddy/Caddyfile
+          subPath: Caddyfile
+      volumes:
+      - name: caddyfile
+        configMap:
+          name: caddy-config

@@ -26,3 +26,9 @@ k8s_resource(
     port_forwards=[port_forward(8080, 8080, name='caddy')],
     labels='caddy'
 )
+
+k8s_resource(
+    workload='caddy-metrics',
+    port_forwards=[port_forward(8081, 8081, name='caddy-metrics')],
+    labels='caddy'
+)

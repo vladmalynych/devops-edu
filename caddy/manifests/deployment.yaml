@@ -27,6 +27,8 @@ spec:
         ports:
         - containerPort: 8080
           name: web
+        - containerPort: 8081
+          name: status
         volumeMounts:
         - name: caddyfile
           mountPath: /etc/caddy/Caddyfile

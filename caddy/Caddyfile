@@ -2,9 +2,11 @@
   metrics
   log default {
 	output stdout
-	format json
+	format json {
+	  time_format iso8601
+	}
 	level info
-	exclude http.handlers.reverse_proxy.health_checker
+	exclude http.log.access.test2
   }
 }
 :8080 {
@@ -12,10 +14,13 @@
     fail_duration 10s
     health_uri /healthz
   }
+  log test1
   handle_errors 5xx {
     respond "It's a 5xx error."
   }
-  log default
+}
+:8081 {
+  log test2
   respond /health 200
   metrics /metrics
 }

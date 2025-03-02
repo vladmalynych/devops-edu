@@ -38,14 +38,12 @@ local_resource(
 
 # ArgoCD applications
 k8s_yaml([
-    'argocd/demo-mysql/application.yaml',
     'argocd/demo-phpadmin/application.yaml'
 ])
 k8s_resource(
     new_name='argocd-apps',
     resource_deps=['argocd'],
     objects=[
-        'demo-mysql:application:argocd',
         'demo-phpmyadmin:application:argocd'
     ]
 )

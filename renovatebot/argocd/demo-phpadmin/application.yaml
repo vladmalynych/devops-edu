@@ -5,7 +5,7 @@ metadata:
   namespace: argocd
 spec:
   project: default
-  source:
+  sources:
   - repoURL: https://charts.bitnami.com/bitnami
     chart: phpmyadmin
     targetRevision: "18.1.2"

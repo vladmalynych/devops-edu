@@ -1,24 +1,24 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: demo-phpmyadmin
+  name: demo-mysql
   namespace: argocd
 spec:
   project: default
   sources:
-  - repoURL: registry-1.docker.io
-    chart: bitnamicharts/phpmyadmin
-    targetRevision: 18.1.2
+  - chart: bitnamicharts/mysql
+    repoURL: registry-1.docker.io
+    targetRevision: 9.16.4
     helm:
-      releaseName: phpmyadmin
+      releaseName: mysql
       valueFiles:
-      - $values/renovatebot/argocd/demo-phpadmin/helm/values.yaml
+        - $helm/renovatebot/argocd/demo-mysql/helm/values.yaml
   - repoURL: 'https://github.com/vladmalynych/devops-edu.git'
     targetRevision: master
-    ref: values
+    ref: helm
   destination:
     server: https://kubernetes.default.svc
-    namespace: phpmyadmin
+    namespace: mysql
   syncPolicy:
     automated:
       prune: true

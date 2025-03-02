@@ -11,7 +11,7 @@ spec:
     targetRevision: "18.1.2"
     helm:
       valueFiles:
-        - $helm/values.yaml
+        - $helm/renovatebot/argocd/demo-phpadmin/helm/values.yaml
   - repoURL: 'https://github.com/vladmalynych/devops-edu.git'
     targetRevision: master
     path: renovatebot/argocd/demo-phpadmin/helm

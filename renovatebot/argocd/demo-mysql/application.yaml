@@ -8,10 +8,10 @@ spec:
   sources:
   - repoURL: https://charts.bitnami.com/bitnami
     chart: mysql
-    targetRevision: "12.2.2"
+    targetRevision: 12.3.0
     helm:
       valueFiles:
-        - $helm/values.yaml
+        - $helm/renovatebot/argocd/demo-mysql/helm/values.yaml
   - repoURL: 'https://github.com/vladmalynych/devops-edu.git'
     targetRevision: master
     path: renovatebot/argocd/demo-mysql/helm

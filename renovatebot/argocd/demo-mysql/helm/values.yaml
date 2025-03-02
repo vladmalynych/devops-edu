@@ -1,0 +1,11 @@
+auth:
+  rootPassword: rootpassword  # Root password for MySQL
+  username: user
+  password: userpassword     # Password for MySQL user
+  database: mydatabase       # Default database
+
+persistence:
+  enabled: false  # Disable persistence for simplicity
+
+service:
+  type: ClusterIP  # Default service type

@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: demo-phpmyadmin
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://charts.bitnami.com/bitnami
+    chart: phpmyadmin
+    targetRevision: "18.1.2"
+    helm:
+      valueFiles:
+        - helm/values.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: phpmyadmin
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true

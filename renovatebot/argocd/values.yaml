@@ -6,6 +6,11 @@ configs:
       type: git
       url: https://github.com/vladmalynych/devops-edu
       project: default
+    docker:
+      url: registry-1.docker.io
+      name: docker
+      type: helm
+      enableOCI: "true"
 
 dex:
   enabled: false

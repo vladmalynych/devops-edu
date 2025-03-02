@@ -6,8 +6,8 @@ metadata:
 spec:
   project: default
   sources:
-  - repoURL: https://charts.bitnami.com/bitnami
-    chart: phpmyadmin
+  - repoURL: registry-1.docker.io
+    chart: bitnamicharts/phpmyadmin
     targetRevision: "18.1.2"
     helm:
       valueFiles:

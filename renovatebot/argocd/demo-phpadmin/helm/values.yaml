@@ -1,7 +1,11 @@
-db:
-  allowArbitraryServer: false
-  port: 3306
-  host: demo-mysql.mysql.svc.cluster.local
+auth:
+  rootPassword: rootpassword  # Root password for MySQL
+  username: user
+  password: userpassword     # Password for MySQL user
+  database: mydatabase       # Default database
+
+persistence:
+  enabled: false  # Disable persistence for simplicity
 
 service:
-  type: ClusterIP  # Service type
+  type: ClusterIP  # Default service type

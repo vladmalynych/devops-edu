@@ -14,6 +14,7 @@ spec:
         - $helm/values.yaml
   - repoURL: 'https://github.com/vladmalynych/devops-edu.git'
     targetRevision: master
+    path: renovatebot/argocd/demo-mysql/helm
     ref: helm
   destination:
     server: https://kubernetes.default.svc

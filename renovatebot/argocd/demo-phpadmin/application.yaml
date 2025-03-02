@@ -6,12 +6,15 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://charts.bitnami.com/bitnami
+  - repoURL: https://charts.bitnami.com/bitnami
     chart: phpmyadmin
     targetRevision: "18.1.2"
     helm:
       valueFiles:
-        - helm/values.yaml
+        - $helm/values.yaml
+  - repoURL: 'https://github.com/vladmalynych/devops-edu.git'
+    targetRevision: master
+    ref: helm
   destination:
     server: https://kubernetes.default.svc
     namespace: phpmyadmin

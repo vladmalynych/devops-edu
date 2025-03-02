@@ -5,13 +5,16 @@ metadata:
   namespace: argocd
 spec:
   project: default
-  source:
-    repoURL: https://charts.bitnami.com/bitnami
+  sources:
+  - repoURL: https://charts.bitnami.com/bitnami
     chart: mysql
     targetRevision: "12.2.2"
     helm:
       valueFiles:
-        - helm/values.yaml
+        - $helm/values.yaml
+  - repoURL: 'https://github.com/vladmalynych/devops-edu.git'
+    targetRevision: master
+    ref: helm
   destination:
     server: https://kubernetes.default.svc
     namespace: mysql

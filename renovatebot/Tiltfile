@@ -24,7 +24,7 @@ helm_resource(
     chart='argo/argo-cd',
     resource_deps=['argo'],
     namespace='argocd',
-    flags=['--values=./argocd/values.yaml']
+    flags=['--values=argocd/helm/values.yaml']
 )
 k8s_resource(
     workload='argocd',
@@ -48,4 +48,15 @@ k8s_resource(
         'demo-mysql:application:argocd',
         'demo-phpmyadmin:application:argocd'
     ]
+)
+
+# Deploy renovatebot
+helm_repo(name='renovate', url='https://docs.renovatebot.com/helm-charts')
+namespace_create('renovatebot')
+helm_resource(
+    name='renovatebot',
+    chart='renovate/renovate',
+    resource_deps=['renovate'],
+    namespace='renovatebot',
+    flags=['--values=renovatebot/helm/values.yaml']
 )

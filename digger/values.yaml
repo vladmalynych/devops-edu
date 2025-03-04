@@ -1,7 +1,7 @@
 digger:
   image:
     repository: registry.digger.dev/diggerhq/digger_backend
-    tag: "v0.6.44"
+    tag: "v0.6.86"
 
   livenessProbe:
     httpGet:

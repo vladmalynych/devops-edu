@@ -1,6 +1,7 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "minimumReleaseAge": "7 days",
+  "enabledManagers": ["argocd"],
   "argocd": {
     "fileMatch": ["^renovatebot/argocd/.+/application\\.yaml$"]
   },

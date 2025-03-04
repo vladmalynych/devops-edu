@@ -4,7 +4,7 @@ This repository contains a collection of demo applications designed to showcase 
 
 ## Table of Contents
 
-- [tilt](https://github.com/vladmalynych/devops-edu/tree/master/tilt) - 🟢 DONE  | *Tool for managing Kubernetes clusters locally.*
+- [tilt](https://github.com/vladmalynych/devops-edu/tree/master/tilt) - 🟢 DONE  | *Tool for local development in Kubernetes cluster.*
 - [kargo](https://github.com/vladmalynych/devops-edu/tree/master/kargo) - 🟢 DONE  | *Deployment automation tool for Kubernetes.*
 - [digger](https://github.com/vladmalynych/devops-edu/tree/master/digger) - 🔴 DROP   | *CI/CD automation tool for DevOps teams.*
 - [minio](https://github.com/vladmalynych/devops-edu/tree/master/minio) - 🟡 WIP   | *Object storage similar to Amazon S3.*

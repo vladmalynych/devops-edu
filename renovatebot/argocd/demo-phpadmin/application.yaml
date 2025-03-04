@@ -8,7 +8,7 @@ spec:
   sources:
   - repoURL: registry-1.docker.io
     chart: bitnamicharts/phpmyadmin
-    targetRevision: 18.1.2
+    targetRevision: 18.1.4
     helm:
       releaseName: phpmyadmin
       valueFiles:

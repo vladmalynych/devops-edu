@@ -30,7 +30,13 @@ To run this project, you'll need Tilt installed and configured on your local mac
    cd <repository-folder>
    ```
 
-2. **Run Tilt**:
+2. **Update Renovatebot configuration**:
+   
+   Update RenovateBot configuration:
+    - Helm values: `renovatebot/renovatebot/helm/values.yaml`
+    - Configuration: `.github/renovate.json`
+
+3. **Run Tilt**:
    
    Run the following command to start Tilt and apply the configurations:
    

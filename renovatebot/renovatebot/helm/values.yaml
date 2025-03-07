@@ -1,50 +1,14 @@
 cronjob:
-  # Schedule the job to run at 01:00 every day
-  schedule: '*/3 * * * *'
-  # Specify a valid time zone, if needed (e.g., "UTC")
+  schedule: '0 10 * * *'
   timeZone: 'UTC'
-  # Set to true to suspend all subsequent executions
   suspend: false
-  # Labels and annotations for the cronjob
-  annotations: {}
-  labels: {}
-  # Policy for handling concurrent runs ("Allow", "Forbid", "Replace")
-  concurrencyPolicy: 'Forbid'
-  # Limit on failed/completed jobs history
-  failedJobsHistoryLimit: 1
-  successfulJobsHistoryLimit: 3
-  # Set to Never or OnFailure
-  jobRestartPolicy: Never
-  # Optional settings
-  ttlSecondsAfterFinished: 3600
-  activeDeadlineSeconds: 7200
-  jobBackoffLimit: 3
-  startingDeadlineSeconds: 60
-  # Parallelism and completions
-  parallelism: 1
-  completions: 1
-  completionMode: 'NonIndexed'
-  # Custom command and arguments
-  commandOverride: []
-  argsOverride: []
-  # Pre and post commands
-  preCommand: ''
-  postCommand: ''
-  # Init containers
-  initContainers: []
-
-pod:
-  annotations: {}
-  labels: {}
 
 image:
   registry: ghcr.io
   repository: renovatebot/renovate
   tag: 38.84.0
   pullPolicy: IfNotPresent
-  useFull: false
-
-imagePullSecrets: []
+  useFull: true
 
 renovate:
   # Global Renovate config as inline config.json
@@ -61,60 +25,4 @@ renovate:
       "extends": ["config:base"],
       "automerge": true
     }
-  configEnableHelmTpl: false
-  configIsSecret: false
-
-  # Security context for the Renovate container
-  securityContext: {}
-
-  # Persistence configuration for the cache
-  persistence:
-    cache:
-      enabled: false
-      storageClass: ""
-      storageSize: "512Mi"
-      volumeName: ""
-      labels: {}
-
-ssh_config:
-  enabled: false
-  id_rsa: ''
-  id_rsa_pub: ''
-  config: ''
-  existingSecret: ''
-
-# Secrets and environment variables
-secrets: {}
-existingSecret: ''
-envFrom: []
-env: {}
-envList: []
-
-# Additional configmaps, volumes, and containers
-extraConfigmaps: []
-extraVolumes: []
-extraVolumeMounts: []
-extraContainers: []
-
-serviceAccount:
-  create: false
-  annotations: {}
-  name: ''
-
-resources: {}
-
-redis:
-  enabled: false
-  nameOverride: ''
-  architecture: standalone
-  auth:
-    enabled: false
-
-hostAliases: []
-
-securityContext: {}
-
-# Scheduling and affinity settings
-nodeSelector: {}
-affinity: {}
-tolerations: []
+  configIsSecret: true

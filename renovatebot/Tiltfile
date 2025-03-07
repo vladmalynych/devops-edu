@@ -54,7 +54,7 @@ k8s_resource(
 helm_repo(name='renovate', url='https://docs.renovatebot.com/helm-charts')
 namespace_create('renovatebot')
 helm_resource(
-    name='renovatebot',
+    name='renovatebot-demo',
     chart='renovate/renovate',
     resource_deps=['renovate'],
     namespace='renovatebot',

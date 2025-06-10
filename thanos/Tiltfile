@@ -14,7 +14,6 @@ load('ext://namespace', 'namespace_create', 'namespace_inject')
 
 # LocalStack
 namespace_create('localstack')
-k8s_yaml(['localstack/manifests/localstack-storage-class.yaml'])
 helm_repo(name='localstack-charts', url='https://localstack.github.io/helm-charts')
 helm_resource(
     name='localstack',
@@ -36,43 +35,32 @@ k8s_resource(
     new_name='localstack-resources',
     objects=[
         'localstack:namespace',
-        'localstack:storageclass',
     ]
 )
 
 # kube-prometheus-stack
 namespace_create('monitoring')
-k8s_yaml([
-    'kube-prom-stack/manifests/alertmanager-storage-class.yaml',
-    'kube-prom-stack/manifests/prometheus-storage-class.yaml',
-    'kube-prom-stack/manifests/grafana-storage-class.yaml',
-])
-k8s_yaml(namespace_inject(read_file('kube-prom-stack/manifests/thanos-storage-config.yaml'), 'monitoring'))
 
 helm_repo(name='prometheus-community', url='https://prometheus-community.github.io/helm-charts')
 helm_resource(
-    name='kube-prom-stack',
+    name='kube-prometheus-stack',
     chart='prometheus-community/kube-prometheus-stack',
     resource_deps=['prometheus-community'],
     namespace='monitoring',
     flags=[
-        '--values=./kube-prom-stack/helm/values.yaml'
+        '--values=./kube-prometheus-stack/helm/values.yaml'
     ]
 )
 
 k8s_resource(
-    new_name='kube-prom-stack-resources',
+    new_name='kube-prometheus-stack-resources',
     objects=[
         'monitoring:namespace',
-        'alertmanager:storageclass',
-        'grafana:storageclass',
-        'prometheus:storageclass',
-        'thanos-storage-config:secret'
     ]
 )
 
 k8s_resource(
-    workload='kube-prom-stack',
+    workload='kube-prometheus-stack',
     links=[
         link('http://localhost:3000', 'grafana'),
         link('http://localhost:3001', 'prometheus'),
@@ -80,19 +68,52 @@ k8s_resource(
     ],
 )
 local_resource(
-    name='kube-prom-stack-grafana-pf',
-    serve_cmd='kubectl port-forward -n monitoring svc/kube-prom-stack-grafana 3000:80',
-    resource_deps=['kube-prom-stack']
+    name='kube-prometheus-stack-grafana-pf',
+    serve_cmd='kubectl port-forward -n monitoring svc/kube-prometheus-stack-grafana 3000:80',
+    resource_deps=['kube-prometheus-stack']
 )
 local_resource(
-    name='kube-prom-stack-prometheus-pf',
-    serve_cmd='kubectl port-forward -n monitoring svc/kube-prom-stack-kube-prome-prometheus 3001:9090',
-    resource_deps=['kube-prom-stack']
+    name='kube-prometheus-stack-prometheus-pf',
+    serve_cmd='kubectl port-forward -n monitoring svc/kube-prometheus-stack-prometheus 3001:9090',
+    resource_deps=['kube-prometheus-stack']
 )
 local_resource(
-    name='kube-prom-stack-alermanager-pf',
-    serve_cmd='kubectl port-forward -n monitoring svc/kube-prom-stack-kube-prome-alertmanager 3002:9093',
-    resource_deps=['kube-prom-stack']
+    name='kube-prometheus-stack-alermanager-pf',
+    serve_cmd='kubectl port-forward -n monitoring svc/kube-prometheus-stack-alertmanager 3002:9093',
+    resource_deps=['kube-prometheus-stack']
 )
 
 # Thanos
+namespace_create('thanos')
+helm_resource(
+    name='thanos',
+    chart='oci://registry-1.docker.io/bitnamicharts/thanos',
+    namespace='thanos',
+    flags=['--values=./thanos/helm/values.yaml']
+)
+
+k8s_resource(
+    new_name='thanos-resources',
+    objects=[
+        'thanos:namespace',
+    ]
+)
+
+k8s_resource(
+    workload='thanos',
+    links=[
+        link('http://localhost:8080', 'thanos-bucketweb'),
+        link('http://localhost:9090', 'thanos-query-frontend'),
+    ],
+)
+
+local_resource(
+    name='thanos-bucketweb-pf',
+    serve_cmd='kubectl port-forward -n thanos svc/thanos-bucketweb 8080:8080',
+    resource_deps=['thanos']
+)
+local_resource(
+    name='thanos-query-frontend-pf',
+    serve_cmd='kubectl port-forward -n thanos svc/thanos-query-frontend 9090:9090',
+    resource_deps=['thanos']
+)

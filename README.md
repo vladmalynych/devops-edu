@@ -13,7 +13,7 @@ This repository contains a collection of demo applications designed to showcase 
 - [renovatebot](https://github.com/vladmalynych/devops-edu/tree/master/renovatebot) - 🟢 DONE   | *Automated dependency update for ArgoCD applications.*
 - [terragrunt](https://github.com/vladmalynych/devops-edu/tree/master/terragrunt) - 🟢 DONE  | *Tool to manage Terraform configurations efficiently.*
 - [terravision](https://github.com/vladmalynych/devops-edu/tree/master/terravision) - 🟡 WIP   | *Visualization tool for infrastructure deployments.*
-- [thanos](https://github.com/vladmalynych/devops-edu/tree/master/thanos) - 🟡 WIP   | *Highly available Prometheus setup for monitoring.*
+- [thanos](https://github.com/vladmalynych/devops-edu/tree/master/thanos) - 🟢 DONE   | *Highly available Prometheus setup for monitoring.*
 - [caddy](https://github.com/vladmalynych/devops-edu/tree/master/caddy) - 🟢 DONE  | *Easy-to-use web server*
 
 ### Explanation

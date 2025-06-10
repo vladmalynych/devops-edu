@@ -1,8 +1,0 @@
-apiVersion: v1
-data:
-  thanos-storage-config.yaml: dHlwZTogczMKY29uZmlnOgogIGJ1Y2tldDogdGhhbm9zCiAgZW5kcG9pbnQ6IGxvY2Fsc3RhY2subG9jYWxzdGFjay5zdmMuY2x1c3Rlci5sb2NhbDo0NTY2CiAgYWNjZXNzX2tleTogdGVzdAogIHNlY3JldF9rZXk6IHRlc3QKICBpbnNlY3VyZTogdHJ1ZQo=
-kind: Secret
-metadata:
-  name: thanos-storage-config
-  namespace: monitoring
-type: Opaque

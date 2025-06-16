@@ -1,0 +1,28 @@
+controllerManager:
+  replicaCount: 2
+  enableFilterNamespace: false
+
+chaosDaemon:
+  runtime: docker
+  socketPath: /var/run/docker.sock
+
+dashboard:
+  create: true
+  service:
+    type: ClusterIP
+
+dnsServer:
+  create: true
+
+prometheus:
+  create: true
+  volume:
+    storage: 2Gi
+    storageClassName: hostpath
+
+
+bpfki:
+  create: false # Enable chaos-kernel
+
+chaosDlv:
+  enable: false

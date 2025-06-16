@@ -15,7 +15,7 @@ This repository contains a collection of demo applications designed to showcase 
 - [terravision](https://github.com/vladmalynych/devops-edu/tree/master/terravision) - 🟡 WIP   | *Visualization tool for infrastructure deployments.*
 - [thanos](https://github.com/vladmalynych/devops-edu/tree/master/thanos) - 🟢 DONE   | *Highly available Prometheus setup for monitoring.*
 - [caddy](https://github.com/vladmalynych/devops-edu/tree/master/caddy) - 🟢 DONE  | *Easy-to-use web server*
-- [chaos-mesh](https://github.com/vladmalynych/devops-edu/tree/master/chaos-mesh) - 🟡 WIP   | *Chaos engineering tool for Kubernetes.*
+- [chaos-mesh](https://github.com/vladmalynych/devops-edu/tree/master/chaos-mesh) - 🟢 DONE   | *Chaos engineering tool for Kubernetes.*
 
 ### Explanation
 

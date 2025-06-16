@@ -1,0 +1,62 @@
+# Tiltfile
+
+allow_k8s_contexts('docker-desktop')
+
+print("""
+-----------------------------------------------------------------
+🧪 CHAOS MESH DEMO
+ℹ️ Tilt file: {tiltfile_path}
+-----------------------------------------------------------------
+""".format(tiltfile_path=config.main_path).strip())
+
+# Load Helm functions
+load('ext://helm_resource', 'helm_resource', 'helm_repo')
+load('ext://namespace', 'namespace_create')
+
+namespace_create('chaos-mesh')
+k8s_yaml([
+    './kubernetes/cluster-manager-rbac.yaml',
+])
+
+k8s_resource(
+    new_name='chaos-mesh-resources',
+    resource_deps=['chaos-mesh'],
+    objects=[
+        'chaos-mesh:Namespace',
+        'account-cluster-manager:ServiceAccount:chaos-mesh',
+        'role-cluster-manager:ClusterRole',
+        'bind-cluster-manager:ClusterRoleBinding',
+    ]
+)
+
+
+# Add Chaos Mesh Helm repo
+helm_repo(name='chaos-mesh-repo', url='https://charts.chaos-mesh.org')
+
+# Install Chaos Mesh
+helm_resource(
+    name='chaos-mesh',
+    chart='chaos-mesh-repo/chaos-mesh',
+    resource_deps=['chaos-mesh-repo'],
+    namespace='chaos-mesh',
+    flags=['--values=./helm/values.yaml']
+)
+
+k8s_resource(
+    workload='chaos-mesh',
+    links=[link('http://localhost:2333', 'chaos-dashboard')],
+)
+k8s_resource(
+    workload='chaos-mesh',
+    links=[link('http://localhost:9090', 'prometheus')],
+)
+local_resource(
+    name='chaos-dashboard-pf',
+    serve_cmd='kubectl port-forward -n chaos-mesh svc/chaos-dashboard 2333:2333',
+    resource_deps=['chaos-mesh']
+)
+local_resource(
+    name='chaos-prometheus-pf',
+    serve_cmd='kubectl port-forward -n chaos-mesh svc/chaos-prometheus 9090:9090',
+    resource_deps=['chaos-mesh']
+)

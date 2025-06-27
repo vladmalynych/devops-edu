@@ -20,6 +20,6 @@ This repository contains a collection of demo applications designed to showcase 
 
 ### Explanation
 
-🟢 **DONE**: Completed apps.
-🟡 **WIP**: Work-in-progress apps that are still under development.
-🔴 **DROP**: Apps that are dropped during demo creation.
+- 🟢 **DONE**: Completed apps.
+- 🟡 **WIP**: Work-in-progress apps that are still under development.
+- 🔴 **DROP**: Apps that are dropped during demo creation.

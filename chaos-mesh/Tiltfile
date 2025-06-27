@@ -6,6 +6,7 @@ print("""
 -----------------------------------------------------------------
 🧪 CHAOS MESH DEMO
 ℹ️ Tilt file: {tiltfile_path}
+ℹ️  Run command in chaos-mesh namespace: kubectl create token account-cluster-manager
 -----------------------------------------------------------------
 """.format(tiltfile_path=config.main_path).strip())
 
@@ -20,7 +21,6 @@ k8s_yaml([
 
 k8s_resource(
     new_name='chaos-mesh-resources',
-    resource_deps=['chaos-mesh'],
     objects=[
         'chaos-mesh:Namespace',
         'account-cluster-manager:ServiceAccount:chaos-mesh',
@@ -59,4 +59,20 @@ local_resource(
     name='chaos-prometheus-pf',
     serve_cmd='kubectl port-forward -n chaos-mesh svc/chaos-prometheus 9090:9090',
     resource_deps=['chaos-mesh']
+)
+
+# Load Nginx YAML for DEMO
+namespace_create('nginx-demo')
+k8s_yaml('./kubernetes/nginx-demo.yaml')
+k8s_resource(
+    workload='nginx',
+    port_forwards=8080,
+    links=[link('http://localhost:8080', 'nginx')],
+)
+
+k8s_resource(
+    new_name='nginx-demo-resources',
+    objects=[
+        'nginx-demo:Namespace',
+    ]
 )

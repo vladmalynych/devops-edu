@@ -1,9 +1,16 @@
 controllerManager:
   replicaCount: 2
+  # If enabled, only pods in the namespace annotated with `"chaos-mesh.org/inject": "enabled"` could be
   enableFilterNamespace: false
+  # targetNamespace only works with clusterScoped is false(namespace scoped mode).
+  # It means namespace which will be injected chaos
+  # targetNamespace: chaos-mesh
 
 chaosDaemon:
+  # runtime specifies which container runtime to use. Currently
+  # we only supports docker, containerd and CRI-O.
   runtime: docker
+  # socketPath specifies the path of container runtime socket on the host.
   socketPath: /var/run/docker.sock
 
 dashboard:
@@ -12,6 +19,8 @@ dashboard:
     type: ClusterIP
 
 dnsServer:
+  # Enable DNS Server which required by DNSChaos.
+  # This simulates DNS chaos (like making domain lookups fail).
   create: true
 
 prometheus:
@@ -19,10 +28,3 @@ prometheus:
   volume:
     storage: 2Gi
     storageClassName: hostpath
-
-
-bpfki:
-  create: false # Enable chaos-kernel
-
-chaosDlv:
-  enable: false

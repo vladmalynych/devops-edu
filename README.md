@@ -16,9 +16,10 @@ This repository contains a collection of demo applications designed to showcase 
 - [thanos](https://github.com/vladmalynych/devops-edu/tree/master/thanos) - 🟢 DONE   | *Highly available Prometheus setup for monitoring.*
 - [caddy](https://github.com/vladmalynych/devops-edu/tree/master/caddy) - 🟢 DONE  | *Easy-to-use web server*
 - [chaos-mesh](https://github.com/vladmalynych/devops-edu/tree/master/chaos-mesh) - 🟢 DONE   | *Chaos engineering tool for Kubernetes.*
+- [chaos-mesh](https://github.com/vladmalynych/devops-edu/tree/master/telepresence) - 🟢 DONE   | *Fast, local development for Kubernetes Microservices*
 
 ### Explanation
 
-🟢 **DONE**: Completed apps. 
-🟡 **WIP**: Work-in-progress apps that are still under development.  
+🟢 **DONE**: Completed apps.
+🟡 **WIP**: Work-in-progress apps that are still under development.
 🔴 **DROP**: Apps that are dropped during demo creation.

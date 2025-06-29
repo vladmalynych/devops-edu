@@ -16,6 +16,7 @@ This repository contains a collection of demo applications designed to showcase 
 - [caddy](https://github.com/vladmalynych/devops-edu/tree/master/caddy) - 🟢 DONE  | *Easy-to-use web server*
 - [chaos-mesh](https://github.com/vladmalynych/devops-edu/tree/master/chaos-mesh) - 🟢 DONE   | *Chaos engineering tool for Kubernetes.*
 - [telepresence](https://github.com/vladmalynych/devops-edu/tree/master/telepresence) - 🟡 WIP   | *Fast, local development for Kubernetes Microservices*
+- [kube-diagrams](https://github.com/vladmalynych/devops-edu/tree/master/kube-diagrams) 🟢 DONE   | *Convert Kubernetes/ArgoCD YAML to architecture diagrams*
 
 ### Explanation
 

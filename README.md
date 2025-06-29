@@ -12,7 +12,6 @@ This repository contains a collection of demo applications designed to showcase 
 - [opencost](https://github.com/vladmalynych/devops-edu/tree/master/opencost) - 🟡 WIP   | *Cost management tool for Kubernetes clusters.*
 - [renovatebot](https://github.com/vladmalynych/devops-edu/tree/master/renovatebot) - 🟢 DONE   | *Automated dependency update for ArgoCD applications.*
 - [terragrunt](https://github.com/vladmalynych/devops-edu/tree/master/terragrunt) - 🟢 DONE  | *Tool to manage Terraform configurations efficiently.*
-- [terravision](https://github.com/vladmalynych/devops-edu/tree/master/terravision) - 🟡 WIP   | *Visualization tool for infrastructure deployments.*
 - [thanos](https://github.com/vladmalynych/devops-edu/tree/master/thanos) - 🟢 DONE   | *Highly available Prometheus setup for monitoring.*
 - [caddy](https://github.com/vladmalynych/devops-edu/tree/master/caddy) - 🟢 DONE  | *Easy-to-use web server*
 - [chaos-mesh](https://github.com/vladmalynych/devops-edu/tree/master/chaos-mesh) - 🟢 DONE   | *Chaos engineering tool for Kubernetes.*

@@ -16,56 +16,43 @@ This guide provides a step-by-step walkthrough to set up AWS Control Tower via t
 * Root account access or sufficient IAM privileges
 * Region support (Control Tower is not available in all regions — start in `us-east-1` or `eu-west-1`)
 
-### Step 1: Access Control Tower Dashboard
+### Step 1: Review Pricing and Select Regions
 
 1. Sign in to the AWS Management Console using the root account.
 2. Navigate to **Control Tower** from the Services menu or search bar.
 3. Click **Set up landing zone**.
+4. Review pricing information.
+5. Choose your preferred **governed AWS regions** (e.g., us-east-1, eu-west-1).
 
-![Step 1](./images/control-tower-step1-dashboard.png)
+![Step 1](./images/control-tower-step1.png)
 
-### Step 2: Set up the Landing Zone
+### Step 2: Configure Organizational Units (OUs)
 
-1. Review the overview page and click **Set up landing zone**.
-2. Provide required information for:
+1. Create Foundational OU (default name `Security`).
+2. Create Additional OUs if needed (e.g., `Enviroments`, this can be created later).
 
-   * **Account email addresses** (for Log Archive and Audit accounts)
-   * **Organizational Unit (OU)** name
-   * **SSO configuration** (optional)
+### Step 3: Configure shared accounts
 
-![Step 2](./images/control-tower-step2-landing-zone.png)
+1. Configure Log Archive account. (immutable logs of API activities and resource changes from all accounts.)
+2. Configure Audit account. (centralized account for security and compliance audits.)
 
-### Step 3: Configure Regions and Guardrails
+Note: These accounts are created automatically and used for centralized logging and governance under Security OU.
 
-1. Select **governed regions** (e.g., us-east-1, eu-west-1).
-2. Choose **mandatory** and **optional guardrails** to enforce security policies.
-3. Confirm the account factory settings.
+![Step 3](./images/control-tower-step3.png)
 
-![Step 3](./images/control-tower-step3-guardrails.png)
+### Step 4: Additional Configurations
 
-### Step 4: Launch and Monitor Setup
+1. Choose an **SSO option** or AWS IAM Identity Center configuration. 
+2. Configure trail and config settings for centralized logging. 
+3. Review **Account Factory** settings for provisioning new accounts. 
+4. Review and set up **guardrails** (predefined security and compliance controls).
 
-1. Review all configurations.
+### Step 5: Review and Set Up Landing Zone
+1. Review all previous configuration details.
 2. Click **Set up landing zone**.
-3. The setup takes \~30–60 minutes.
+3. The provisioning process takes approximately 30–60 minutes.
 
-![Step 4](./images/control-tower-step4-review.png)
-
-### Step 5: Provision New Accounts (Optional)
-
-Once the landing zone is ready:
-
-1. Go to **Account Factory** from Control Tower.
-2. Click **Enroll account**.
-3. Provide:
-
-   * Account name and email
-   * Organizational unit
-   * IAM role name
-   * VPC configuration (optional)
-
-![Step 5](./images/control-tower-step5-account-factory.png)
-
+![Step 5](./images/control-tower-step5.png)
 ---
 
 ## 🤝 Control Tower vs. Manual Account Management
@@ -114,3 +101,9 @@ Once the landing zone is ready:
 | You need support for all AWS regions                        | ❌ (limited)           | ✅                |
 | You want full control over IAM, SCPs, and billing manually  | ❌                     | ✅                |
 
+---
+
+## Conclusion
+AWS Control Tower is a powerful service for quickly establishing a secure, multi-account AWS environment with built-in governance. 
+It is ideal for organizations looking to enforce best practices and streamline account management. 
+However, for highly customized setups or when using Infrastructure as Code (IaC) tools like Terraform, manual management may provide the flexibility needed.

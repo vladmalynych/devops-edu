@@ -1,0 +1,7 @@
+# strimzi/helm/values.yaml
+
+watchNamespaces:
+  - "kafka"
+
+rbac:
+  create: true

@@ -1,0 +1,82 @@
+# Tiltfile
+allow_k8s_contexts('docker-desktop')
+update_settings(
+    max_parallel_updates=3,
+    k8s_upsert_timeout_secs=300,
+    suppress_unused_image_warnings=None
+)
+
+load('ext://helm_resource', 'helm_resource', 'helm_repo')
+load('ext://namespace', 'namespace_create')
+
+print("""
+-----------------------------------------------------------------
+✨ STRIMZI-KAFKA DEMO PROJECT
+ℹ️ Tilt file: {tiltfile_path}
+-----------------------------------------------------------------
+""".format(tiltfile_path=config.main_path).strip())
+
+namespace_create('kafka')
+
+helm_repo(name='strimzi', url='https://strimzi.io/charts/')
+helm_resource(
+    name='strimzi-kafka-operator',
+    chart='strimzi/strimzi-kafka-operator',
+    resource_deps=['strimzi'],
+    namespace='kafka',
+    flags=['--values=./helm/strimzi/values.yaml', '--force']
+)
+
+k8s_resource(
+    new_name='strimzi-resources',
+    objects=[
+        'kafka:namespace',
+    ]
+)
+
+k8s_yaml([
+    './k8s/strimzi/kafka-cluster.yaml',
+    './k8s/strimzi/kafka-topics.yaml',
+])
+
+k8s_resource(
+    new_name='kafka-cluster',
+    objects=[
+        'kafka-cluster:Kafka:kafka',
+        'controller:KafkaNodePool:kafka',
+        'broker:KafkaNodePool:kafka',
+    ],
+    resource_deps=['strimzi-kafka-operator'],
+    labels=['kafka']
+)
+
+k8s_resource(
+    new_name='kafka-topics',
+    objects=[
+        'topic-1:KafkaTopic:kafka',
+        'topic-2:KafkaTopic:kafka',
+        'topic-3:KafkaTopic:kafka',
+    ],
+    resource_deps=['kafka-cluster'],
+    labels=['kafka']
+)
+
+helm_repo(name='kafka-ui-chart', url='https://kafbat.github.io/helm-charts')
+helm_resource(
+    name='kafka-ui',
+    chart='kafka-ui-chart/kafka-ui',
+    resource_deps=['kafka-ui-chart'],
+    namespace='kafka',
+    flags=['--values=./helm/kafka-ui/values.yaml']
+)
+
+k8s_resource(
+    workload='kafka-ui',
+    links=[link('http://localhost:8080', 'kafka-ui')],
+)
+
+local_resource(
+    name='kafka-ui-pf',
+    serve_cmd='kubectl port-forward -n kafka svc/kafka-ui 8080:80',
+    resource_deps=['kafka-ui']
+)

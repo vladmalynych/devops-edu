@@ -17,8 +17,8 @@ This repository contains a collection of demo applications designed to showcase 
 - [chaos-mesh](https://github.com/vladmalynych/devops-edu/tree/master/chaos-mesh) - 🟢 DONE   | *Chaos engineering tool for Kubernetes.*
 - [telepresence](https://github.com/vladmalynych/devops-edu/tree/master/telepresence) - 🟡 WIP   | *Fast, local development for Kubernetes Microservices*
 - [kube-diagrams](https://github.com/vladmalynych/devops-edu/tree/master/kube-diagrams) 🟢 DONE   | *Convert Kubernetes/ArgoCD YAML to architecture diagrams*
-- [strimzi](https://github.com/vladmalynych/devops-edu/tree/master/strimzi) - 🟡 WIP   | *Kafka on Kubernetes made easy.*
-- [aws-control-tower](https://github.com/vladmalynych/devops-edu/tree/master/aws/aws-control-tower) - 🟡 WIP   | *Secure, multi-account AWS environment based on AWS best practices*
+- [strimzi](https://github.com/vladmalynych/devops-edu/tree/master/strimzi) - 🟢 DONE   | *Kafka on Kubernetes made easy.*
+- [aws-control-tower](https://github.com/vladmalynych/devops-edu/tree/master/aws/aws-control-tower) - 🟢 DONE   | *Secure, multi-account AWS environment based on AWS best practices*
 
 ### Explanation
 

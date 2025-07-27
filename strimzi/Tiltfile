@@ -16,23 +16,25 @@ print("""
 -----------------------------------------------------------------
 """.format(tiltfile_path=config.main_path).strip())
 
-namespace_create('kafka')
+namespace_create('strimzi')
 
-helm_repo(name='strimzi', url='https://strimzi.io/charts/')
+helm_repo(name='strimzi-chart', url='https://strimzi.io/charts/')
 helm_resource(
     name='strimzi-kafka-operator',
-    chart='strimzi/strimzi-kafka-operator',
-    resource_deps=['strimzi'],
-    namespace='kafka',
-    flags=['--values=./helm/strimzi/values.yaml', '--force']
+    chart='strimzi-chart/strimzi-kafka-operator',
+    resource_deps=['strimzi-chart'],
+    namespace='strimzi',
+    flags=['--values=./helm/strimzi/values.yaml'],
 )
 
 k8s_resource(
     new_name='strimzi-resources',
     objects=[
-        'kafka:namespace',
+        'strimzi:namespace',
     ]
 )
+
+namespace_create('kafka')
 
 k8s_yaml([
     './k8s/strimzi/kafka-cluster.yaml',
@@ -44,7 +46,7 @@ k8s_resource(
     objects=[
         'kafka-cluster:Kafka:kafka',
         'controller:KafkaNodePool:kafka',
-        'broker:KafkaNodePool:kafka',
+        'broker:KafkaNodePool:kafka'
     ],
     resource_deps=['strimzi-kafka-operator'],
     labels=['kafka']
@@ -65,7 +67,7 @@ helm_repo(name='kafka-ui-chart', url='https://kafbat.github.io/helm-charts')
 helm_resource(
     name='kafka-ui',
     chart='kafka-ui-chart/kafka-ui',
-    resource_deps=['kafka-ui-chart'],
+    resource_deps=['kafka-ui-chart', 'strimzi-kafka-operator'],
     namespace='kafka',
     flags=['--values=./helm/kafka-ui/values.yaml']
 )
@@ -79,4 +81,10 @@ local_resource(
     name='kafka-ui-pf',
     serve_cmd='kubectl port-forward -n kafka svc/kafka-ui 8080:80',
     resource_deps=['kafka-ui']
+)
+
+local_resource(
+    name='kafka-bootstrap-pf',
+    serve_cmd='kubectl port-forward -n kafka svc/kafka-cluster-kafka-bootstrap 9092:9092',
+    resource_deps=['kafka-ui', 'strimzi-kafka-operator']
 )

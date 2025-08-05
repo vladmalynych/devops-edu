@@ -9,7 +9,7 @@ This repository contains a collection of demo applications designed to showcase 
 - [digger](https://github.com/vladmalynych/devops-edu/tree/master/digger) - 🔴 DROP   | *CI/CD automation tool for DevOps teams.*
 - [minio](https://github.com/vladmalynych/devops-edu/tree/master/minio) - 🟡 WIP   | *Object storage similar to Amazon S3.*
 - [nushell](https://github.com/vladmalynych/devops-edu/tree/master/nushell) - 🟢 DONE   | *Nushell shell for working with data.*
-- [opencost](https://github.com/vladmalynych/devops-edu/tree/master/opencost) - 🟡 WIP   | *Cost management tool for Kubernetes clusters.*
+- [opencost](https://github.com/vladmalynych/devops-edu/tree/master/opencost) - 🟢 DONE   | *Cost management tool for Kubernetes clusters.*
 - [renovatebot](https://github.com/vladmalynych/devops-edu/tree/master/renovatebot) - 🟢 DONE   | *Automated dependency update for ArgoCD applications.*
 - [terragrunt](https://github.com/vladmalynych/devops-edu/tree/master/terragrunt) - 🟢 DONE  | *Tool to manage Terraform configurations efficiently.*
 - [thanos](https://github.com/vladmalynych/devops-edu/tree/master/thanos) - 🟢 DONE   | *Highly available Prometheus setup for monitoring.*

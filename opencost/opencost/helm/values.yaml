@@ -1,0 +1,13 @@
+opencost:
+
+  prometheus:
+    internal:
+      enabled: true
+      serviceName: kube-prometheus-stack-prometheus
+      namespaceName: monitoring
+      port: 9090
+      scheme: http
+
+  ui:
+    enabled: true
+    uiPort: 9090

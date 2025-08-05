@@ -11,20 +11,77 @@ print("""
 load('ext://helm_resource', 'helm_resource', 'helm_repo')
 load('ext://namespace', 'namespace_create')
 
-namespace_create('opencost')
-helm_repo(name='opencost', url='https://opencost.github.io/opencost-helm-chart')
-
-helm_resource(
-    name='opencost-local',
-    chart='opencost/opencost',
-    resource_deps=['opencost'],
-    namespace='opencost',
-    flags=['--values=./helm/opencost-values.yaml']
+# kube-prometheus-stack
+namespace_create('monitoring')
+k8s_resource(
+    new_name='kube-prometheus-stack-resources',
+    objects=[
+        'monitoring:namespace',
+    ]
 )
 
+helm_repo(name='prometheus-community', url='https://prometheus-community.github.io/helm-charts')
+helm_resource(
+    name='kube-prometheus-stack',
+    chart='prometheus-community/kube-prometheus-stack',
+    resource_deps=['prometheus-community'],
+    namespace='monitoring',
+    flags=[
+        '--values=./kube-prometheus-stack/helm/values.yaml'
+    ]
+)
 k8s_resource(
-    workload='opencost-local',
-    port_forwards=[
-        port_forward(9000, 9000, name='API'),
+    workload='kube-prometheus-stack',
+    links=[
+        link('http://localhost:3000', 'grafana'),
+        link('http://localhost:3001', 'prometheus'),
+    ],
+)
+local_resource(
+    name='kube-prometheus-stack-grafana-pf',
+    serve_cmd='kubectl port-forward -n monitoring svc/kube-prometheus-stack-grafana 3000:80',
+    resource_deps=['kube-prometheus-stack']
+)
+local_resource(
+    name='kube-prometheus-stack-prometheus-pf',
+    serve_cmd='kubectl port-forward -n monitoring svc/kube-prometheus-stack-prometheus 3001:9090',
+    resource_deps=['kube-prometheus-stack']
+)
+
+# OpenCost
+namespace_create('opencost')
+k8s_resource(
+    new_name='opencost-resources',
+    objects=[
+        'opencost:namespace',
+    ]
+)
+
+helm_repo(name='opencost-chart', url='https://opencost.github.io/opencost-helm-chart')
+helm_resource(
+    name='opencost',
+    chart='opencost-chart/opencost',
+    resource_deps=['opencost-chart', 'kube-prometheus-stack'],
+    namespace='opencost',
+    flags=['--values=./opencost/helm/values.yaml']
+)
+k8s_resource(
+    workload='opencost',
+    links=[
+        link('http://localhost:9090', 'opencost'),
+    ],
+)
+local_resource(
+    name='opencost-pf',
+    serve_cmd='kubectl port-forward -n opencost svc/opencost 9090:9090',
+    resource_deps=['opencost']
+)
+
+namespace_create('stress-test')
+k8s_yaml('./manifests/stress-test.yaml')
+k8s_resource(
+    new_name='stress-test-resources',
+    objects=[
+        'stress-test:Namespace',
     ]
 )

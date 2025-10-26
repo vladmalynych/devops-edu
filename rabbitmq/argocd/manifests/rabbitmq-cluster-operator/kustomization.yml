@@ -1,0 +1,9 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: rabbitmq-system
+
+# Install the official operators from release artifacts (pinned) and custom cluster definition
+resources:
+  - https://github.com/rabbitmq/cluster-operator/releases/v2.17.0/download/cluster-operator.yml
+  - cluster/cluster.yaml

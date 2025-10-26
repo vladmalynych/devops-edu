@@ -5,4 +5,4 @@ namespace: rabbitmq-system
 
 # Install the official operators from release artifacts (pinned)
 resources:
-  - https://github.com/rabbitmq/messaging-topology-operator/releases/v1.18.0/download/messaging-topology-operator-with-certmanager.yaml
+  - github.com/rabbitmq/messaging-topology-operator/config/default?ref=v1.18.0

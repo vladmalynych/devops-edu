@@ -41,3 +41,12 @@ k8s_yaml([
     'argocd/apps/rabbitmq-cluster-operator.yaml',
     'argocd/apps/rabbitmq-topology-operator.yaml'
 ])
+
+k8s_resource(
+    new_name='argocd-apps',
+    resource_deps=['argocd'],
+    objects=[
+        'rabbitmq-cluster-operator:application:argocd',
+        'rabbitmq-topology-operator:application:argocd',
+    ]
+)

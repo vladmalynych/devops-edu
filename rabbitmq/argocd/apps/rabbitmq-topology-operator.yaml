@@ -13,8 +13,6 @@ spec:
     path: rabbitmq/argocd/manifests/rabbitmq-topology-operator/
     targetRevision: master
     kustomize:
-      commonLabels:
-        app.kubernetes.io/managed-by: argocd
   syncPolicy:
     syncOptions:
       - CreateNamespace=true

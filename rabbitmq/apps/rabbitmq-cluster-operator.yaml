@@ -10,7 +10,7 @@ spec:
     server: https://kubernetes.default.svc
   source:
     repoURL: https://github.com/vladmalynych/devops-edu.git
-    path: rabbitmq/manifests/rabbitmq-cluster-operator/
+    path: rabbitmq/manifests/rabbitmq-operators/rabbitmq-cluster-operator
     targetRevision: master
     kustomize:
   syncPolicy:

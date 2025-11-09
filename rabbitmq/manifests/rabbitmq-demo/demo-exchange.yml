@@ -4,9 +4,9 @@ metadata:
   name: direct-exchange
 spec:
   name: direct-exchange
-  vhost: "/demo-vhost"
+  vhost: demo-vhost
   type: direct
-  autoDelete: false
   durable: true
+  autoDelete: false
   rabbitmqClusterReference:
     name: rabbitmq-demo

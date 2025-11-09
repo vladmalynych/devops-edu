@@ -47,5 +47,6 @@ k8s_resource(
     resource_deps=['argocd'],
     objects=[
         'rabbitmq-cluster-operator:application',
+        'rabbitmq-topology-operator:application',
     ]
 )

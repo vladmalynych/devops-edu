@@ -3,6 +3,6 @@ kind: Kustomization
 
 namespace: rabbitmq-system
 
-# Install the official operators from release artifacts (pinned) and custom cluster definition
+# 🐇 Rabbitmq cluster operator
 resources:
   - https://github.com/rabbitmq/cluster-operator/releases/download/v2.17.0/cluster-operator.yml

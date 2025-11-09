@@ -6,3 +6,5 @@ namespace: rabbitmq-demo
 # 🐇 Rabbitmq cluster
 resources:
   - demo-cluster.yml
+  - demo-exchange.yml
+  - demo-vhost.yml

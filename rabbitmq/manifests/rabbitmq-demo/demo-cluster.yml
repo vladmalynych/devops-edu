@@ -2,7 +2,6 @@ apiVersion: rabbitmq.com/v1beta1
 kind: RabbitmqCluster
 metadata:
   name: rabbitmq-demo
-  namespace: rabbitmq-system
 spec:
   replicas: 1
   # Optional: define RabbitMQ image or leave default

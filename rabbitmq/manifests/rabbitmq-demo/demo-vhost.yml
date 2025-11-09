@@ -1,0 +1,10 @@
+apiVersion: rabbitmq.com/v1beta1
+kind: Vhost
+metadata:
+  name: demo-vhost
+spec:
+  name: demo-vhost
+  defaultQueueType: quorum
+  deletionPolicy: retain
+  rabbitmqClusterReference:
+    name: rabbitmq-demo

@@ -1,0 +1,12 @@
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: direct-exchange
+spec:
+  name: direct-exchange
+  vhost: "/demo-vhost"
+  type: direct
+  autoDelete: false
+  durable: true
+  rabbitmqClusterReference:
+    name: rabbitmq-demo

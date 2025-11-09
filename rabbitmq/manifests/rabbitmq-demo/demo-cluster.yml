@@ -1,0 +1,29 @@
+ apiVersion: rabbitmq.com/v1beta1
+kind: RabbitmqCluster
+metadata:
+  name: rabbitmq-demo
+  namespace: rabbitmq-system
+spec:
+  replicas: 1
+  # Optional: define RabbitMQ image or leave default
+  image: rabbitmq:3.13-management
+  # Enables RabbitMQ management UI on port 15672
+  service:
+    type: ClusterIP
+  # Configure resource requests and limits
+  resources:
+    requests:
+      cpu: 200m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+  # Persistent storage
+  persistence:
+    storageClassName: gp2         # or your cluster’s default
+    storage: 1Gi
+  # Configure username/password secret (optional)
+  secretBackend:
+    type: managed                 # operator will create the secret automatically
+    managed:
+      name: rabbitmq-demo-default-user

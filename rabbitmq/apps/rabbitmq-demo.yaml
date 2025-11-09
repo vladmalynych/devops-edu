@@ -1,0 +1,22 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: rabbitmq-demo
+  namespace: argocd
+spec:
+  project: default
+  destination:
+    namespace: rabbitmq-demo
+    server: https://kubernetes.default.svc
+  source:
+    repoURL: https://github.com/vladmalynych/devops-edu.git
+    path: rabbitmq/manifests/rabbitmq-demo
+    targetRevision: master
+    kustomize:
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+      - RespectIgnoreDifferences=true
+    automated:
+      prune: true
+      selfHeal: true

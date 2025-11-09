@@ -1,22 +1,27 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: rabbitmq-topology-operator
+  name: rabbitmq-demo
   namespace: argocd
 spec:
   project: default
   destination:
-    namespace: rabbitmq-system
+    namespace: rabbitmq-demo
     server: https://kubernetes.default.svc
   source:
     repoURL: https://github.com/vladmalynych/devops-edu.git
-    path: rabbitmq/manifests/rabbitmq-operators/rabbitmq-topology-operator
+    path: rabbitmq-operator/manifests/rabbitmq-demo
     targetRevision: master
-    kustomize:
+    kustomize: {}
   syncPolicy:
     syncOptions:
-      - CreateNamespace=false
+      - CreateNamespace=true
       - RespectIgnoreDifferences=true
     automated:
       prune: true
       selfHeal: true
+  ignoreDifferences:
+    - group: rabbitmq.com
+      kind: RabbitmqCluster
+      jqPathExpressions:
+        - .spec.secretBackend

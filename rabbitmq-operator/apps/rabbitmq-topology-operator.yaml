@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: rabbitmq-cluster-operator
+  name: rabbitmq-topology-operator
   namespace: argocd
 spec:
   project: default
@@ -10,7 +10,7 @@ spec:
     server: https://kubernetes.default.svc
   source:
     repoURL: https://github.com/vladmalynych/devops-edu.git
-    path: rabbitmq/manifests/rabbitmq-operators/rabbitmq-cluster-operator
+    path: rabbitmq-operator/manifests/rabbitmq-operators/rabbitmq-topology-operator
     targetRevision: master
     kustomize:
   syncPolicy:

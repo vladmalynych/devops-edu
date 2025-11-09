@@ -16,6 +16,17 @@ print("""
 -----------------------------------------------------------------
 """.format(tiltfile_path=config.main_path).strip())
 
+# Deploy cert-manager
+helm_repo(name='jetstack', url='https://charts.jetstack.io')
+namespace_create('cert-manager')
+helm_resource(
+    name='cert-manager',
+    chart='jetstack/cert-manager',
+    resource_deps=['jetstack'],
+    namespace='cert-manager',
+    flags=['--set=crds.enabled=true']
+)
+
 # Deploy ArgoCD
 helm_repo(name='argo', url='https://argoproj.github.io/argo-helm')
 namespace_create('argocd')

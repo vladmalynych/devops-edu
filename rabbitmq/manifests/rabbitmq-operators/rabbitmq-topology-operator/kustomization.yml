@@ -11,5 +11,9 @@ patches:
   - target:
       kind: Namespace
       name: rabbitmq-system
-    patch: |
+    patch: |-
+      apiVersion: v1
+      kind: Namespace
+      metadata:
+        name: rabbitmq-system
       $patch: delete

@@ -5,4 +5,4 @@ namespace: rabbitmq-system
 
 # Install the official operators from release artifacts (pinned) and custom cluster definition
 resources:
-  - github.com/rabbitmq/cluster-operator/config/default?ref=v2.17.0
+  - https://github.com/rabbitmq/cluster-operator/releases/download/v2.17.0/cluster-operator.yml

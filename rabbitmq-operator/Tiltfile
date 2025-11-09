@@ -61,5 +61,6 @@ k8s_resource(
     objects=[
         'rabbitmq-cluster-operator:application',
         'rabbitmq-topology-operator:application',
+        'rabbitmq-demo:application'
     ]
 )

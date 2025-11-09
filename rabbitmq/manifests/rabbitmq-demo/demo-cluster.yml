@@ -1,4 +1,4 @@
- apiVersion: rabbitmq.com/v1beta1
+apiVersion: rabbitmq.com/v1beta1
 kind: RabbitmqCluster
 metadata:
   name: rabbitmq-demo
@@ -20,7 +20,7 @@ spec:
       memory: 512Mi
   # Persistent storage
   persistence:
-    storageClassName: gp2         # or your cluster’s default
+    storageClassName: hostpath
     storage: 1Gi
   # Configure username/password secret (optional)
   secretBackend:

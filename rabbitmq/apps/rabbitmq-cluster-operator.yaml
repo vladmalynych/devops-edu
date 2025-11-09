@@ -15,7 +15,7 @@ spec:
     kustomize:
   syncPolicy:
     syncOptions:
-      - CreateNamespace=true
+      - CreateNamespace=false
       - RespectIgnoreDifferences=true
     automated:
       prune: true

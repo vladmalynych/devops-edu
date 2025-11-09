@@ -36,6 +36,7 @@ local_resource(
     resource_deps=['argocd']
 )
 
+namespace_create('rabbitmq-system')
 # ArgoCD applications
 k8s_yaml([
     'apps/rabbitmq-cluster-operator.yaml',

@@ -1,0 +1,22 @@
+# apiVersion: argoproj.io/v1alpha1
+# kind: Application
+# metadata:
+#   name: rabbitmq-topology-operator
+#   namespace: argocd
+# spec:
+#   project: default
+#   destination:
+#     namespace: rabbitmq-system
+#     server: https://kubernetes.default.svc
+#   source:
+#     repoURL: https://github.com/vladmalynych/devops-edu.git
+#     path: rabbitmq/argocd/manifests/rabbitmq-topology-operator/
+#     targetRevision: master
+#     kustomize:
+#   syncPolicy:
+#     syncOptions:
+#       - CreateNamespace=true
+#       - RespectIgnoreDifferences=true
+#     automated:
+#       prune: true
+#       selfHeal: true

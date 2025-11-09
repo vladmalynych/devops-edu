@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: rabbitmq-cluster-operator
+  name: rabbitmq-operators
   namespace: argocd
 spec:
   project: default

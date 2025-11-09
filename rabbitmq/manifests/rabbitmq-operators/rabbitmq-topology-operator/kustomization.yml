@@ -5,4 +5,4 @@ namespace: rabbitmq-system
 
 # 🐇 RabbitMQ Messaging Topology Operator (with cert-manager)
 resources:
-  - https://github.com/rabbitmq/messaging-topology-operator/releases/download/v1.18.0/messaging-topology-operator-with-certmanager.yaml
+  - https://github.com/rabbitmq/messaging-topology-operator/releases/download/v1.18.0/messaging-topology-operator.yaml

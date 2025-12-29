@@ -1,0 +1,52 @@
+alertmanager:
+  enabled: true
+
+grafana:
+  enabled: true
+
+prometheus:
+  enabled: true
+  thanosService:
+    enabled: true
+  prometheusSpec:
+    retention: 4h
+    thanos:
+      objectStorageConfig:
+        secret:
+          type: S3
+          config:
+            bucket: "thanos"
+            endpoint: "localstack.localstack:4566"
+            region: "us-east-1"
+            insecure: true
+            access_key: "test"
+            secret_key: "test"
+
+kubelet:
+  enabled: true
+  serviceMonitor:
+    enabled: true
+
+kubeControllerManager:
+  enabled: false
+
+coreDns:
+  enabled: false
+
+kubeDns:
+  enabled: false
+
+kubeEtcd:
+  enabled: false
+
+kubeScheduler:
+  enabled: false
+
+kubeProxy:
+  enabled: false
+
+kubeStateMetrics:
+  enabled: true
+
+nodeExporter:
+  enabled: false

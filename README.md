@@ -20,6 +20,7 @@ This repository contains a collection of demo applications designed to showcase 
 - [strimzi](https://github.com/vladmalynych/devops-edu/tree/master/strimzi) - 🟢 DONE   | *Kafka on Kubernetes made easy.*
 - [aws-control-tower](https://github.com/vladmalynych/devops-edu/tree/master/aws/aws-control-tower) - 🟢 DONE   | *Secure, multi-account AWS environment based on AWS best practices*
 - [rabbitmq-operator](https://github.com/vladmalynych/devops-edu/tree/master/rabbitmq-operator) - 🟢 DONE   | *RabbitMQ cluster and topology operators*
+- [krr](https://github.com/vladmalynych/devops-edu/tree/master/krr) - 🟢 DONE   | *Kubernetes Resource Recommender tool*
 
 ### Explanation
 

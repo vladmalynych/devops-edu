@@ -1,0 +1,41 @@
+persistence:
+  enabled: false
+
+enableStartupScripts: true
+startupScriptContent: |
+  #!/bin/bash
+  # Check if the S3 bucket exists
+  if ! awslocal s3api head-bucket --bucket thanos 2>/dev/null; then
+    echo "Creating S3 bucket 'thanos'..."
+    awslocal s3api create-bucket --bucket thanos
+  else
+    echo "S3 bucket 'thanos' already exists."
+  fi
+  # Check if the IAM policy exists
+  if ! awslocal iam list-policies --query "Policies[?PolicyName=='S3AccessPolicy']" --output text | grep -q S3AccessPolicy; then
+    echo "Creating IAM policy 'S3AccessPolicy'..."
+    awslocal iam create-policy \
+      --policy-name S3AccessPolicy \
+      --policy-document '{
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "Statement",
+            "Effect": "Allow",
+            "Action": [
+              "s3:ListBucket",
+              "s3:GetObject",
+              "s3:DeleteObject",
+              "s3:PutObject"
+            ],
+            "Resource": [
+              "arn:aws:s3:::thanos/*",
+              "arn:aws:s3:::thanos"
+            ]
+          }
+        ]
+      }'
+  else
+    echo "IAM policy 'S3AccessPolicy' already exists."
+  fi
+  echo "Startup script completed successfully."

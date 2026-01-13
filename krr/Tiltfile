@@ -12,32 +12,6 @@ print("""
 load('ext://helm_resource', 'helm_resource', 'helm_repo')
 load('ext://namespace', 'namespace_create', 'namespace_inject')
 
-# LocalStack
-namespace_create('localstack')
-helm_repo(name='localstack-charts', url='https://localstack.github.io/helm-charts')
-helm_resource(
-    name='localstack',
-    chart='localstack-charts/localstack',
-    resource_deps=['localstack-charts'],
-    namespace='localstack',
-    flags=['--values=./localstack/helm/values.yaml']
-)
-k8s_resource(
-    workload='localstack',
-    links=[link('https://localhost:4566', 'localstack')],
-)
-local_resource(
-    name='localstack-pf',
-    serve_cmd='kubectl port-forward -n localstack svc/localstack 4566:4566',
-    resource_deps=['localstack']
-)
-k8s_resource(
-    new_name='localstack-resources',
-    objects=[
-        'localstack:namespace',
-    ]
-)
-
 # kube-prometheus-stack
 namespace_create('monitoring')
 
@@ -83,41 +57,6 @@ local_resource(
     resource_deps=['kube-prometheus-stack']
 )
 
-# Thanos
-namespace_create('thanos')
-helm_resource(
-    name='thanos',
-    chart='oci://registry-1.docker.io/bitnamicharts/thanos',
-    namespace='thanos',
-    flags=['--values=./thanos/helm/values.yaml']
-)
-
-k8s_resource(
-    new_name='thanos-resources',
-    objects=[
-        'thanos:namespace',
-    ]
-)
-
-k8s_resource(
-    workload='thanos',
-    links=[
-        link('http://localhost:8080', 'thanos-bucketweb'),
-        link('http://localhost:9090', 'thanos-query-frontend'),
-    ],
-)
-
-local_resource(
-    name='thanos-bucketweb-pf',
-    serve_cmd='kubectl port-forward -n thanos svc/thanos-bucketweb 8080:8080',
-    resource_deps=['thanos']
-)
-local_resource(
-    name='thanos-query-frontend-pf',
-    serve_cmd='kubectl port-forward -n thanos svc/thanos-query-frontend 9090:9090',
-    resource_deps=['thanos']
-)
-
 namespace_create('krr')
 k8s_yaml([
     './krr/rbac.yaml',
@@ -131,6 +70,6 @@ k8s_resource(
         'krr:serviceaccount',
         'krr:clusterrole',
         'krr:clusterrolebinding',
-        'slack-secrets:secret'
+        'krr-secrets:secret'
     ]
 )

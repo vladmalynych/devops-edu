@@ -1,91 +1,59 @@
 apiVersion: batch/v1
-kind: Job
+kind: CronJob
 metadata:
   name: krr
   namespace: krr
 spec:
-  backoffLimit: 0
-  template:
-    metadata:
-      labels:
-        app: krr
+  schedule: "0 9 1 * *"  # first day of each month
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  jobTemplate:
     spec:
-      restartPolicy: Never
-      serviceAccountName: krr
-
-      volumes:
-        - name: krr-output
-          emptyDir: {}
-
-      containers:
-        # ======================================================
-        # 1️⃣ KRR – generate resource recommendations
-        # ======================================================
-        - name: krr
-          image: robustadev/krr:v1.27.0
-          imagePullPolicy: Always
-          command:
-            - /bin/sh
-            - -c
-            - |
-              set -euo pipefail
-              echo "[KRR] Starting analysis..."
-              python krr.py simple \
-                --cpu-min=10 \
-                --mem-min=10 \
-                --max-workers=10 \
-                --cpu_percentile=90 \
-                --memory_buffer_percentage=20 \
-                --history_duration=720 \
-                --timeframe_duration=0.2 \
-                --use_oomkill_data \
-                --oom_memory_buffer_percentage=20 \
-                --allow_hpa \
-                --show-cluster-name \
-                --formatter=html \
-
-
-
-              python krr.py simple --cpu-min=10 --mem-min=10  --format json > /output/krr-report.json.tmp
-              mv /output/krr-report.json.tmp /output/krr-report.json
-              echo "[KRR] Report successfully generated"
-              touch /output/KRR_DONE
-          volumeMounts:
-            - name: krr-output
-              mountPath: /output
-          resources:
-            requests:
-              memory: 1Gi
-            limits:
-              memory: 2Gi
-
-        # ======================================================
-        # 2️⃣ Slack notifier – send report after KRR finishes
-        # ======================================================
-        - name: slack-notifier
-          image: curlimages/curl:8.6.0
-          imagePullPolicy: IfNotPresent
-          envFrom:
-            - secretRef:
-                name: slack-secrets
-          command:
-            - /bin/sh
-            - -c
-            - |
-              set -euo pipefail
-              DONE="/output/KRR_DONE"
-              FILE="/output/krr-report.json"
-              echo "[Slack] Waiting for KRR to complete..."
-              if ! timeout 10m sh -c 'while [ ! -f '"$DONE"' ]; do sleep 2; done'; then
-                echo "[Slack] KRR did not complete successfully"
-                exit 1
-              fi
-              if ! [ -s "$FILE" ]; then
-                echo "[Slack] Report file is empty or missing"
-                exit 1
-              fi
-              echo "[Slack] Uploading report..."
-              echo "[Slack] Report sent successfully"
-          volumeMounts:
-            - name: krr-output
-              mountPath: /output
+      backoffLimit: 0
+      template:
+        metadata:
+          labels:
+            app: krr
+        spec:
+          restartPolicy: Never
+          serviceAccountName: krr
+          containers:
+            - name: krr
+              image: robustadev/krr:v1.28.0
+              imagePullPolicy: IfNotPresent
+              envFrom:
+                - secretRef:
+                    name: krr-secrets
+              command:
+                - /bin/sh
+                - -c
+                - |
+                  set -euo pipefail
+                  echo "[KRR] Starting analysis..."
+                  python krr.py simple \
+                    --resource=Deployment \
+                    --resource=StatefulSet \
+                    --resource=DaemonSet \
+                    --fileoutput="krr-report-${CLUSTER_NAME}.csv" \
+                    --max-workers=10 \
+                    --cpu-min=10 \
+                    --mem-min=20 \
+                    --cpu-percentile=95 \
+                    --memory-buffer-percentage=15 \
+                    --history-duration=720 \
+                    --timeframe-duration=1 \
+                    --use-oomkill-data \
+                    --oom-memory-buffer-percentage=25 \
+                    --allow-hpa \
+                    --formatter=csv \
+                    --width=2048 \
+                    --logtostderr
+                    # --slackoutput="${SLACK_CHANNEL}" \
+                    # --slacktitle=":bar_chart: [${CLUSTER_NAME}] - Kubernetes Resource Report" \
+                  echo "[KRR] Report successfully generated"
+              resources:
+                requests:
+                  memory: 2Gi
+                limits:
+                  memory: 2Gi
